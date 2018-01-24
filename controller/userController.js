@@ -29,17 +29,22 @@ function User(req) {
 
 function createUser(req, res) {
 
-
+  //debemos comprobar si el email o el nick existen en la DB
   Model.findOne({
+    //usamos la estructura del OR de mongoose
     $or: [{ email: User(req).email }, { nick: User(req).nick }]
   }, (err, data) => {
-    if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400)); 
-   
+    //aqui retoranremos errores
+    if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
+    //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprovada
     if (data != null) {
       return res.status(400).send(config.resJson(config.resMsg.userExist, 400));
     } else {
-        Model.create(User(req), (err, data) => {
+      //de lo contrario, se tomaran los valores del usuario y se registraran en la DB
+      Model.create(User(req), (err, data) => {
+        //si ocurre algun erro pues lo retornaremos
         if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
+        //sino retornaremos un mensaje exitoso
         res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
       });
     }
