@@ -25,7 +25,8 @@ const resMsg = {
   CreateErr: 'No pudo ser creado',
   userExist: 'Usuario ya existe en la base de datos',
   fieldRequired: 'Este campo es requerido',
-  PasswordErr: 'Contraseña incorrecta'
+  PasswordErr: 'Contraseña incorrecta',
+  SearchErr: 'Ha ocurrido un error en la busqueda'
 };
 
 

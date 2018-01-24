@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const config = require('./config/config');
 const userRouter = require('./routes/user');
 // cargar rutas
@@ -12,6 +13,8 @@ const userRouter = require('./routes/user');
 //usar body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(morgan('dev'));
 
 //cors
 
