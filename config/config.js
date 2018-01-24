@@ -19,6 +19,8 @@ const resMsg = {
   userFound: 'Usuario encontrado',
   userCreateOK: 'Usuario creado correctamente',
   userCreateErr: 'Usuario no Creado',
+  RegisterOK: 'Se ha registrado correctamente',
+  RegisterErr: 'Ha ocurrido un error en el registro',
   CreateOK: 'Creado correctamente',
   CreateErr: 'No pudo ser creado',
   userExist: 'Usuario ya existe en la base de datos',
