@@ -3,6 +3,7 @@
 const config = require('../config/config');
 const Model = require('../model/user');
 const bcrypt = require('bcrypt-nodejs');
+const jwt = require('../services/jwt');
 
 // validador de la contraseña traida por el res.body
 function Passcrypt(password) {
@@ -73,10 +74,21 @@ function loginUser(req, res) {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     if (data != null) {
     // si existe pues procederemos a comprobar la contraseña registrada
+
+    //con esta const podremos ver si la contraseña es correcta o no
     const validateLog = bcrypt.compareSync(req.body.password, data.password);  
       if (validateLog) {
-        return res.status(200).send(config.resJson(config.resMsg.loginOK, 200));
+        //en caso de que sea correcta se haran los procesoces de logueo y de cifrado tokens
+        if(req.body.tokenget){          
+          return res.status(200).send(config.resJson(jwt.createToken(data), 200));
+        } else {
+          data.password = undefined;
+          return res.status(200).send(config.resJson(data, 200));
+        }
+        
+
       } else {
+        //pero en caso de que no simplemente retornaremos que la contraseña es incorrecta
         return res.status(404).send(config.resJson(config.resMsg.PasswordErr, 404));
       }
     } else {
