@@ -26,7 +26,11 @@ const resMsg = {
   userExist: 'Usuario ya existe en la base de datos',
   fieldRequired: 'Este campo es requerido',
   PasswordErr: 'Contraseña incorrecta',
-  SearchErr: 'Ha ocurrido un error en la busqueda'
+  SearchErr: 'Ha ocurrido un error en la busqueda',
+  requestErr: 'Ha ocurrido un error en la peticion',
+  nonAuth: 'La petición no tiene la cabecera de autenticación',
+  tokenExp: 'El token ha expirado',
+  tokenInvalid: 'El token no es válido'
 };
 
 
