@@ -5,21 +5,29 @@ const moment = require('moment');
 const config = require('../config/config')
 const secretKey = 'secret_token_summertime_sadness';
 
-exports.ensure_Auth = function (req, res, next) {
-  if (!req.headers.authorization) {
+exports.ensure_Auth = function (req, res, next) {  
+  //en caso de que no se reciba en la cabecera la autorizacion, pues se retornata un 403
+  if (!req.body.authorization) {
     return res.status(403).send(config.resJson(config.resMsg.nonAuth, 403));
   }
-
-  const token = req.headers.authorization.replace(/['"]+/g, '');
-
+  //sino, se recibira el token para decodificarlo
+  //aqui recibimos el token y remplazamos las comillas ' o " por espacio vacio ''
+  const token = req.body.authorization.replace(/['"]+/g, '');
+  //luego decodificaremos el token, pero para evitar errores, se validara en el try-catch
   try {
-    const userToken = jwt.decode(token, secret);
-
+    //decodificar    
+    var userToken = jwt.decode(token, secretKey);
+    //si la fecha de expiracion del token es menor o igual a la actual pues el token no servirá
     if (userToken.exp <= moment().unix()) {
+      //retornaremos como respuesta que el token ha expirado
       return res.status(401).send(config.resJson(config.resMsg.tokenExp))
     }
   } catch (ex) {
+    //y si se capta alguna excepcion se retornará
     return res.status(404).send(config.resJson(config.resMsg.tokenInvalid, 404));
   }
+  req.user = userToken;
+
+  next();
 
 }

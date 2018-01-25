@@ -83,8 +83,7 @@ function loginUser(req, res) {
           return res.status(200).send(config.resJson(jwt.createToken(data), 200));
         } else {
           data.password = undefined;
-          return res.status(200).send(config.resJson(data, 200));
-        }
+          return res.status(200).send(config.resJson(data, 200));        }
         
 
       } else {
