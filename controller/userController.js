@@ -29,17 +29,17 @@ function User(req) {
 
 // ESTO ESTA OBSOLETO HASTA EL MOMENTO
 function findUser(filter) {
-
-  console.log(filter);
+  
+  var a = 777; 
+  console.log(1);
   Model.findOne(filter, (err, data) => {
     if (err) return err;
-    if (data != null) {
+    if (data != null) return console.log(2);
       
-    } else {
-      
-    }    
   });  
-  
+  console.log(3);
+  console.log('pasé')
+  return a;
 }
 
 
@@ -94,15 +94,17 @@ function loginUser(req, res) {
       // sino pues evitaremos la comprobacion del resto de datos
       return res.status(404).send(config.resJson(config.resMsg.userNotFound, 404));
     }    
-  });  
+  }); 
+}
 
-
-
-
+function halo(req, res) {
+  const halo1 = findUser({ email: User(req).email });
+  res.status(200).send({halo1})
 }
 
 
 module.exports = {
   createUser,
-  loginUser
+  loginUser,
+  halo
 }

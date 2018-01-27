@@ -12,4 +12,5 @@ app.post('/register', userController.createUser);
 // este es el que se ocupa del login
 app.post('/login', middle_auth.ensure_Auth, userController.loginUser);
 
+
 module.exports = app;
