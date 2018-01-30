@@ -97,6 +97,7 @@ function loginUser(req, res) {
   }); 
 }
 
+//esto es PARA UNA PRUEBA - ES OBSOLETO
 function halo(req, res) {
   const halo1 = findUser({ email: User(req).email });
   res.status(200).send({halo1})
