@@ -42,7 +42,7 @@ function findUser(filter) {
   return a;
 }
 
-
+// Este es el metodo de registro
 function createUser(req, res) {
   //debemos comprobar si el email o el nick existen en la DB
   Model.findOne({
@@ -67,8 +67,8 @@ function createUser(req, res) {
   });
 
 }
-
-function loginUser(req, res) {
+// Este es el metodo de login
+function loginUser(req, res) {  
 // antes de hacer el login buscaremos si el email registrado existe
   Model.findOne({ email: User(req).email }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
@@ -83,7 +83,8 @@ function loginUser(req, res) {
           return res.status(200).send(config.resJson(jwt.createToken(data), 200));
         } else {
           data.password = undefined;
-          return res.status(200).send(config.resJson(data, 200));        }
+          return res.status(200).send(config.resJson(data, 200));
+        }
         
 
       } else {
@@ -95,6 +96,27 @@ function loginUser(req, res) {
       return res.status(404).send(config.resJson(config.resMsg.userNotFound, 404));
     }    
   }); 
+}
+
+
+function getUser(req, res) {
+  const id_user = req.params.id;
+  
+  Model.findOne({ _id: id_user }, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+
+    if (data != null){
+      if(req.body.tokenget){          
+        return res.status(200).send(config.resJson(jwt.createToken(data), 200));
+      } else {
+        data.password = undefined;
+        return res.status(200).send(config.resJson(data, 200));
+      }
+    } else {
+      
+    }
+
+  });
 }
 
 //esto es PARA UNA PRUEBA - ES OBSOLETO
