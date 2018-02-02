@@ -12,6 +12,9 @@ const middle_auth = require('../middlewares/authenticated');
 app.post('/register', userController.createUser);
 // este es el que se ocupa del login
 app.post('/login', middle_auth.ensure_Auth, userController.loginUser);
-
+// este es de prueba get
+app.get('/get', (req, res)=>{
+  res.status(200).send('conecté');
+})
 
 module.exports = app;

@@ -8,6 +8,11 @@ const config = require('./config/config');
 const userRouter = require('./routes/user');
 // cargar rutas
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 //middlewares -: es un metodo que se ejecuta antes que llegue a un controlador
 //usar body-parser
