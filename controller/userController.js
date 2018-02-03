@@ -101,9 +101,9 @@ function loginUser(req, res) {
 
 function getUser(req, res) {
   const id_user = req.params.id;
-  
+   
   Model.findOne({ _id: id_user }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
 
     if (data != null){
       if(req.body.tokenget){          
@@ -129,5 +129,6 @@ function halo(req, res) {
 module.exports = {
   createUser,
   loginUser,
+  getUser,
   halo
 }

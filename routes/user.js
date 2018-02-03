@@ -11,10 +11,12 @@ const middle_auth = require('../middlewares/authenticated');
 // este es el post que recibe la funcion de Registro del controlador
 app.post('/register', userController.createUser);
 // este es el que se ocupa del login
-app.post('/login', middle_auth.ensure_Auth, userController.loginUser);
+app.post('/login', userController.loginUser);
 // este es de prueba get
 app.get('/get', (req, res)=>{
   res.status(200).send('conecté');
-})
+});
+
+app.get('/user/:id',middle_auth.ensure_Auth, userController.getUser);
 
 module.exports = app;
