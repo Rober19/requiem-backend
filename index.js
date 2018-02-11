@@ -7,7 +7,7 @@ const app = require('./app');
 const mongoose = require('./config/db-mongoose');
 
 //abri un server
-app.listen(3000, () => {
+app.listen(config.port, () => {
   console.log(config.resJson((config.resMsg.serverOn + ' on ' + config.port), 200))
 });
 
