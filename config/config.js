@@ -1,6 +1,6 @@
 'use strict'
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 const resMsg = {
   found: 'Encontrado',

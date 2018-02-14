@@ -119,6 +119,12 @@ function getUser(req, res) {
   });
 }
 
+function getUsers(req, res){
+  const identity_user_id = req.user.sub;
+  
+  
+}
+
 //esto es PARA UNA PRUEBA - ES OBSOLETO
 function halo(req, res) {
   const halo1 = findUser({ email: User(req).email });
@@ -130,5 +136,6 @@ module.exports = {
   createUser,
   loginUser,
   getUser,
+  getUsers,
   halo
 }
