@@ -24,6 +24,7 @@ const resMsg = {
   CreateOK: 'Creado correctamente',
   CreateErr: 'No pudo ser creado',
   userExist: 'Usuario ya existe en la base de datos',
+  notUsers: 'No hay usuarios disponibles',
   fieldRequired: 'Este campo es requerido',
   PasswordErr: 'Contraseña incorrecta',
   SearchErr: 'Ha ocurrido un error en la busqueda',

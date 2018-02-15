@@ -18,6 +18,6 @@ app.get('/get', (req, res)=>{
 });
 
 app.get('/user/:id',middle_auth.ensure_Auth, userController.getUser);
-app.get('/users',middle_auth.ensure_Auth, userController.getUsers);
+app.get('/users/:page',middle_auth.ensure_Auth, userController.getUsers);
 
 module.exports = app;

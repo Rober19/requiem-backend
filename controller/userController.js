@@ -1,6 +1,7 @@
 'use strict'
 
 const config = require('../config/config');
+const dbPaginate = require('mongoose-pagination');
 const Model = require('../model/user');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('../services/jwt');
@@ -122,6 +123,24 @@ function getUser(req, res) {
 function getUsers(req, res){
   const identity_user_id = req.user.sub;
   
+  let Page = 1;
+  if (req.params.page){
+    Page = req.params.page;
+  }
+
+  let itemsPerPage = 5;
+
+  Model.find().sort('_id').paginate(Page, itemsPerPage, (err, users, total) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+
+    if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
+
+    return res.status(200).send({
+      users,
+      total,
+      pages : Math.ceil(total/itemsPerPage)
+    })
+  })
   
 }
 
