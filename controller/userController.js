@@ -121,11 +121,15 @@ function getUser(req, res) {
 }
 
 function getUsers(req, res){
+
   const identity_user_id = req.user.sub;
   
+  console.log(req.query);
+
   let Page = 1;
-  if (req.params.page){
-    Page = req.params.page;
+  
+  if (req.query.page){
+    Page = req.query.page;
   }
 
   let itemsPerPage = 5;
@@ -140,8 +144,8 @@ function getUsers(req, res){
       total,
       pages : Math.ceil(total/itemsPerPage)
     })
-  })
-  
+  });  
+
 }
 
 //esto es PARA UNA PRUEBA - ES OBSOLETO

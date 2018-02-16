@@ -13,11 +13,11 @@ app.post('/register', userController.createUser);
 // este es el que se ocupa del login
 app.post('/login', userController.loginUser);
 // este es de prueba get
-app.get('/get', (req, res)=>{
+app.get('/get', (req, res) => {
   res.status(200).send('conecté');
 });
 
-app.get('/user/:id',middle_auth.ensure_Auth, userController.getUser);
-app.get('/users/:page',middle_auth.ensure_Auth, userController.getUsers);
+app.get('/user/:id', middle_auth.ensure_Auth, userController.getUser);
+app.get('/users', middle_auth.ensure_Auth, userController.getUsers);
 
 module.exports = app;
