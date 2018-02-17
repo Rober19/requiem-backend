@@ -6,7 +6,7 @@ const resMsg = {
   found: 'Encontrado',
   notfound : 'No Encontrado',
   confirm: 'Confirmado',
-  error: 'Ha ocurrido un error',
+  error: 'Ha ocurrído un error',
   deleted: 'Ha sido eliminado correctamente',
   serverOn: 'Server Running',
   serverOff: 'Server Off',
@@ -29,7 +29,8 @@ const resMsg = {
   PasswordErr: 'Contraseña incorrecta',
   SearchErr: 'Ha ocurrido un error en la busqueda',
   requestErr: 'Ha ocurrido un error en la peticion',
-  nonAuth: 'La petición no tiene la cabecera de autenticación',
+  nonAuthHeader: 'La petición no tiene la cabecera de autenticación',
+  nonAuth: 'No cumple con los permisos para hacer esta función',
   tokenExp: 'El token ha expirado',
   tokenInvalid: 'El token no es válido'
 };

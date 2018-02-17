@@ -8,7 +8,7 @@ const secretKey = 'secret_token_summertime_sadness';
 exports.ensure_Auth = function (req, res, next) {  
   //en caso de que no se reciba en la cabecera la autorizacion, pues se retornata un 403
   if (!req.headers.authorization) 
-    return res.status(403).send(config.resJson(config.resMsg.nonAuth, 403));
+    return res.status(403).send(config.resJson(config.resMsg.nonAuthHeader, 403));
   
   //sino, se recibira el token para decodificarlo
   //aqui recibimos el token y remplazamos las comillas ' o " por espacio vacio ''

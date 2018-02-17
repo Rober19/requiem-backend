@@ -2,7 +2,7 @@
 
 const config = require('../config/config');
 const dbPaginate = require('mongoose-pagination');
-const Model = require('../model/user');
+const dbUser = require('../model/user');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('../services/jwt');
 
@@ -33,7 +33,7 @@ function findUser(filter) {
   
   var a = 777; 
   console.log(1);
-  Model.findOne(filter, (err, data) => {
+  dbUser.findOne(filter, (err, data) => {
     if (err) return err;
     if (data != null) return console.log(2);
       
@@ -46,7 +46,7 @@ function findUser(filter) {
 // Este es el metodo de registro
 function createUser(req, res) {
   //debemos comprobar si el email o el nick existen en la DB
-  Model.findOne({
+  dbUser.findOne({
     //usamos la estructura del OR de mongoose
     $or: [{ email: User(req).email }, { nick: User(req).nick }]
   }, (err, data) => {
@@ -57,7 +57,7 @@ function createUser(req, res) {
       return res.status(400).send(config.resJson(config.resMsg.userExist, 400));
     } else {
       //de lo contrario, se tomaran los valores del usuario y se registraran en la DB
-      Model.create(User(req), (err, data) => {
+      dbUser.create(User(req), (err, data) => {
         //si ocurre algun erro pues lo retornaremos
         if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
         //sino retornaremos un mensaje exitoso
@@ -71,7 +71,7 @@ function createUser(req, res) {
 // Este es el metodo de login
 function loginUser(req, res) {  
 // antes de hacer el login buscaremos si el email registrado existe
-  Model.findOne({ email: User(req).email }, (err, data) => {
+  dbUser.findOne({ email: User(req).email }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     if (data != null) {
     // si existe pues procederemos a comprobar la contraseña registrada
@@ -103,7 +103,7 @@ function loginUser(req, res) {
 function getUser(req, res) {
   const id_user = req.params.id;
    
-  Model.findOne({ _id: id_user }, (err, data) => {
+  dbUser.findOne({ _id: id_user }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
 
     if (data != null){
@@ -134,7 +134,7 @@ function getUsers(req, res){
 
   let itemsPerPage = 5;
 
-  Model.find().sort('_id').paginate(Page, itemsPerPage, (err, users, total) => {
+  dbUser.find().sort('_id').paginate(Page, itemsPerPage, (err, users, total) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
 
     if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
@@ -146,6 +146,20 @@ function getUsers(req, res){
     })
   });  
 
+}
+
+function updateUser(req, res){
+
+  const user_id = req.params.id;
+  const data_upt = User(req);
+
+  delete data_upt.password;
+
+  if (user_id != req.user.sub){
+    return res.status(500).send(config.resJson(config.resMsg.nonAuthHeader, 500));
+  }
+
+  
 }
 
 //esto es PARA UNA PRUEBA - ES OBSOLETO
