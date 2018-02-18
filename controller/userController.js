@@ -9,7 +9,9 @@ const dbUser = require('../model/user');
 // la depnd de encriptamiento para contraseñas
 const bcrypt = require('bcrypt-nodejs');
 // la depnd de encriptamiento para datos del usuario(en tokens)
-const jwt = require('../services/jwt');
+const jwt_user = require('../services/jwt');
+// la depnd de creacion de tokens
+const jwt = require('jwt-simple');
 // libreria para trabajar con archivos FILE SYSTEM
 const fs = require('fs');
 // trabajar con rutas del sistema de ficheros
@@ -91,7 +93,7 @@ function loginUser(req, res) {
       if (validateLog) {
         //en caso de que sea correcta se haran los procesoces de logueo y de cifrado tokens
         if (req.body.tokenget) {
-          return res.status(200).send(config.resJson(jwt.createToken(data), 200));
+          return res.status(200).send(config.resJson(jwt_user.createToken(data), 200));
         } else {
           data.password = undefined;
           return res.status(200).send(config.resJson(data, 200));
@@ -117,7 +119,7 @@ function getUser(req, res) {
 
     if (data != null) {
       if (req.body.tokenget) {
-        return res.status(200).send(config.resJson(jwt.createToken(data), 200));
+        return res.status(200).send(config.resJson(jwt_user.createToken(data), 200));
       } else {
         data.password = undefined;
         return res.status(200).send(config.resJson(data, 200));
@@ -191,19 +193,22 @@ function updateUser(req, res) {
 function uploadImage(req, res) {
 
   const user_id = req.params.id;
-  const image_name = req.file_name;
- 
+  const image_name = req.file_name;  
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: image_name }, { new: true }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
 
+    const img_user = image_name.split('\--');
+    //este es el id del usuario descifrado de la imagen
+    const img_id_user = jwt.decode(img_user[0], 'packet'); 
+    //para que no aparezca el hash de la contraseña
+    data.password = undefined;
     return res.status(200).send(config.resJson(data, 200));
 
   });
-
-
-
 }
+
+
 
 function removeFiles(file_path) {
 

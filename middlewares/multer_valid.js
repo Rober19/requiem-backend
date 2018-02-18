@@ -2,6 +2,8 @@
 const path = require('path');
 const config = require('../config/config');
 
+const jwt = require('jwt-simple');
+
 //aqui requerimos multer para validar la subida de archivos
 const multer = require('multer');
 
@@ -16,7 +18,13 @@ exports.image_valid = function (req, res, next) {
   const storage = multer.diskStorage({
     destination: './uploads/users/',
     filename: (req, file, cb) => {
-      let file_name = file.fieldname + '-' + Date.now() + path.extname(file.originalname)
+      const user_id_token = jwt.encode(req.user.sub, 'packet');
+      let file_name = '';
+      if (path.extname(file.originalname) == '.gif') {
+        file_name = user_id_token + '--' + path.extname(file.originalname)
+      } else {
+        file_name = user_id_token + '--' + '.png'
+      }      
         ;
       cb(null, file_name);
       req.file_name = file_name;
@@ -53,10 +61,10 @@ exports.image_valid = function (req, res, next) {
     if (req.fileValidationError) {
       return res.status(500).send(config.resJson(req.fileValidationError, 500));
     }
-    
-    if (err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(500).send(config.resJson((config.resMsg.limit_unexpectedFiles + ` : ${maxFile_image} ${config.resMsg.file}`), 500));
 
-    if (err.code == 'LIMIT_FILE_SIZE') return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_image / 1048576}MB`), 500));
+    if (err && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(500).send(config.resJson((config.resMsg.limit_unexpectedFiles + ` : ${maxFile_image} ${config.resMsg.file}`), 500));
+
+    if (err && err.code == 'LIMIT_FILE_SIZE') return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_image / 1048576}MB`), 500));
 
     if (err) return res.status(500).send(config.resJson((err), 500));
 
