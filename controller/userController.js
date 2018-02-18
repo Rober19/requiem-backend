@@ -193,37 +193,43 @@ function updateUser(req, res) {
 function uploadImage(req, res) {
 
   const user_id = req.params.id;
-  const image_name = req.file_name;
+  let image_name = req.file_name;
+  const img_user = image_name.split('\--');
+
+  const path_file = './uploads/users/' + image_name;
+  fs.renameSync(path_file, `./uploads/users/${img_user[0]}${img_user[2]}`);
+  image_name = `${img_user[0]}${img_user[2]}`;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: image_name }, { new: true }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));    
 
-    const img_user = image_name.split('\--');
     //este es el id del usuario descifrado de la imagen
     const img_id_user = jwt.decode(img_user[0], 'packet');
+
     //para que no aparezca el hash de la contraseña
     data.password = undefined;
+
     return res.status(200).send(config.resJson(data, 200));
 
   });
 }
 
 function getImageUser(req, res) {
-  const image_file = req.params.imageFile;  
+  const image_file = req.params.imageFile;
   const path_file = './uploads/users/' + image_file;
 
-  if (image_file != null){
+  if (image_file) {
     fs.exists(path_file, (data) => {
-      if (data) {      
+      if (data) {
         res.status(200).sendFile(path.resolve(path_file));
       } else {
         return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
       }
     });
-  }else {
+  } else {
     return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
   }
-  
+
 
 }
 

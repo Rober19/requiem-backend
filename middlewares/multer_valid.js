@@ -15,43 +15,48 @@ exports.image_valid = function (req, res, next) {
     return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
   }
 
+    // establecemos el tamaño maximo que podran tener la imagenes en este caso
+    const maxSize_image = 3 * 1024 * 1024;
+    const maxFile_image = 1;
+ 
+
   //configuramos el Storage para que nombre el archivo y lo ubique cuando sea descargado
   const storage = multer.diskStorage({
     destination: './uploads/users/',
     filename: (req, file, cb) => {
       const user_id_token = jwt.encode(req.user.sub, 'packet');
-      let file_name = '';
+      let file_name = '';      
+      console.log(file);
       if (path.extname(file.originalname) == '.gif') {
-        file_name = user_id_token + '--' + path.extname(file.originalname)
+        file_name = user_id_token + '--' + Date.now() +'--' + path.extname(file.originalname)
       } else {
-        file_name = user_id_token + '--' + '.png'
-      }      
-        ;
+        file_name = user_id_token + '--' + Date.now() +'--' + '.png'
+      }       
       cb(null, file_name);
       req.file_name = file_name;    
-
     }
   });
-  // establecemos el tamaño maximo que podran tener la imagenes en este caso
-  const maxSize_image = 3 * 1024 * 1024;
-  const maxFile_image = 1;
-  // configuramos el upload, estableciendo limites y filtros para subir solo archivos validos
-  const upload = multer({
-    dest: './uploads/users/',
-    limits: { fileSize: maxSize_image },
-    storage,
-    fileFilter: function (req, file, cb) {
 
-      if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg' || file.mimetype == 'image/gif') {
-        //aqui se descargó correctamente
-      } else {
-        //pero aqui retornara cualquier error
-        req.fileValidationError = config.resMsg.extensionInvalid;
-        return cb(null, false, new Error(config.resJson(req.fileValidationError, 500)));
-      }
-      cb(null, true);
-    }
-  });
+     // configuramos el upload, estableciendo limites y filtros para subir solo archivos validos
+     const upload = multer({
+      
+      limits: { fileSize: maxSize_image },    
+      fileFilter: function (req, file, cb) {
+  
+        if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg' || file.mimetype == 'image/gif') {
+          //aqui se descargó correctamente
+          cb(null, true);
+        } else {
+          //pero aqui retornara cualquier error
+          req.fileValidationError = config.resMsg.extensionInvalid;
+          return cb(null, false, new Error(config.resJson(req.fileValidationError, 500)));
+        }        
+        
+      },
+      dest: './uploads/users/',
+      storage: storage
+    });
+
   //establecemos que se subirá aquel dato que en body se llame ('image')
   const md_image = upload.fields([{ name: 'image', maxCount: maxFile_image }]);
 
