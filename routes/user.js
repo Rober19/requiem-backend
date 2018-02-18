@@ -32,7 +32,7 @@ app.use(function (err, req, res, next) {
 })
 
 app.get('*', (req, res) => {
-  res.status(404).send(config.resJson(`Route: ${config.resMsg.notfound}`, 404));
+  res.status(200).send(config.resJson(config.resMsg.notfound));
 });
 
 
