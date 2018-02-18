@@ -35,7 +35,7 @@ function User(req) {
     nick: req.body.nick,
     email: req.body.email,
     password: Passcrypt(req.body.password),
-    image: req.body.image
+    image: 'default-user.png'
   }
   return user;
 }
