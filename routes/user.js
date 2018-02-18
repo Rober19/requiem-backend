@@ -1,6 +1,7 @@
-
-
 'use strict'
+
+const config = require('../config/config');
+
 //requerimos express con su metodo router
 const app = require('express').Router();
 //instanciamos el controlador de usuarios para usar sus metodos
@@ -30,6 +31,9 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Something broke!')
 })
 
+app.get('*', (req, res) => {
+  res.status(404).send(config.resJson(`Route: ${config.resMsg.notfound}`, 404));
+});
 
 
 // este es de prueba get

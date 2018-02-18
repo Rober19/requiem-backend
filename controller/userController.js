@@ -212,13 +212,19 @@ function getImageUser(req, res) {
   const image_file = req.params.imageFile;  
   const path_file = './uploads/users/' + image_file;
 
-  fs.exists(path_file, (data) => {
-    if (data) {      
-      res.status(200).sendFile(path.resolve(path_file));
-    } else {
-      return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
-    }
-  });
+  if (image_file != null){
+    fs.exists(path_file, (data) => {
+      if (data) {      
+        res.status(200).sendFile(path.resolve(path_file));
+      } else {
+        return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
+      }
+    });
+  }else {
+    return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
+  }
+  
+
 }
 
 
