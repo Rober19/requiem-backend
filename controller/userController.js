@@ -190,41 +190,16 @@ function updateUser(req, res) {
 }
 
 function uploadImage(req, res) {
+  
   const user_id = req.params.id;
 
-
-
-  if (req.files) {
-    //esta constante tiene el path del archivo
-    const file_path = req.files.image.path;
-    //esta constante tiene un array dividiendo la dirección del archivo
-    const file_split = file_path.split('\\');
-    //esta constante tiene el nombre y extension del archivo
-    const file_name = file_split[file_split.length - 1].split('\.');
-
-    const file_ext = file_name[file_name.length - 1].split('\.');
-
-    if (user_id != req.user.sub) {
-      return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
-      removeFiles(file_path);
-    }
-
-    if (file_ext == 'png' || file_ext == 'jpg') {
-      return res.status(200).send(config.resJson(file_ext, 200));
-    } else {
-      removeFiles(file_path);
-      return res.status(500).send(config.resJson(config.resMsg.extensionInvalid, 500));
-    }
-
-
-
-  }
+  return res.status(200).send(config.resJson(config.resMsg.confirm, 200));
 
 }
 
 function removeFiles(file_path) {
   fs.unlink(file_path, (err) => {
-    
+
   })
 }
 
