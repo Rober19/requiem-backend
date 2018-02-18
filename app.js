@@ -24,6 +24,9 @@ app.use(morgan('dev'));
 //cors
 
 //rutas
+app.get('*', (req, res) => {
+  res.status(404).send(config.resJson(`Route: ${config.resMsg.notfound}`, 404));
+});
 app.use('/app', userRouter);
 
 module.exports = app;
