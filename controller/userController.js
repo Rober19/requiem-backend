@@ -193,14 +193,14 @@ function updateUser(req, res) {
 function uploadImage(req, res) {
 
   const user_id = req.params.id;
-  const image_name = req.file_name;  
+  const image_name = req.file_name;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: image_name }, { new: true }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
 
     const img_user = image_name.split('\--');
     //este es el id del usuario descifrado de la imagen
-    const img_id_user = jwt.decode(img_user[0], 'packet'); 
+    const img_id_user = jwt.decode(img_user[0], 'packet');
     //para que no aparezca el hash de la contraseña
     data.password = undefined;
     return res.status(200).send(config.resJson(data, 200));
@@ -208,11 +208,19 @@ function uploadImage(req, res) {
   });
 }
 
+function getImageUser(req, res) {
+  const image_file = req.params.imageFile;  
+  const path_file = './uploads/users/' + image_file;
 
-
-function removeFiles(file_path) {
-
+  fs.exists(path_file, (data) => {
+    if (data) {      
+      res.status(200).sendFile(path.resolve(path_file));
+    } else {
+      return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
+    }
+  });
 }
+
 
 //esto es PARA UNA PRUEBA - ES OBSOLETO
 function halo(req, res) {
@@ -227,5 +235,6 @@ module.exports = {
   getUser,
   getUsers,
   updateUser,
-  uploadImage
+  uploadImage,
+  getImageUser
 }

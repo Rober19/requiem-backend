@@ -23,6 +23,8 @@ app.get('/users', middle_auth.ensure_Auth, userController.getUsers);
 app.put('/update-user/:id', middle_auth.ensure_Auth, userController.updateUser)
 //esta petición es para la subida de la imagen del usuario en sesion
 app.post('/upload-image-user/:id', [middle_auth.ensure_Auth, middle_file.image_valid], userController.uploadImage);
+// esta petición es para obtener la imagen del usuario por parametros
+app.get('/get-image-user/:imageFile', userController.getImageUser)
 
 app.use(function (err, req, res, next) {  
   res.status(500).send('Something broke!')

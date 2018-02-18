@@ -27,8 +27,7 @@ exports.image_valid = function (req, res, next) {
       }      
         ;
       cb(null, file_name);
-      req.file_name = file_name;
-      req.file_path = '';
+      req.file_name = file_name;    
 
     }
   });
