@@ -109,7 +109,6 @@ function loginUser(req, res) {
   });
 }
 
-
 function getUser(req, res) {
   const id_user = req.params.id;
 
@@ -192,15 +191,22 @@ function updateUser(req, res) {
 function uploadImage(req, res) {
 
   const user_id = req.params.id;
+  const image_name = req.file_name;
+ 
 
-  return res.status(200).send(config.resJson(config.resMsg.CreateOK, 200));
+  dbUser.findByIdAndUpdate({ _id: user_id }, { image: image_name }, { new: true }, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+
+    return res.status(200).send(config.resJson(data, 200));
+
+  });
+
+
 
 }
 
 function removeFiles(file_path) {
-  fs.unlink(file_path, (err) => {
 
-  })
 }
 
 //esto es PARA UNA PRUEBA - ES OBSOLETO

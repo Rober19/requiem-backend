@@ -4,6 +4,7 @@ const port = process.env.PORT || 3000;
 
 const resMsg = {
   found: 'Encontrado',
+  file: 'Archivo',
   notfound : 'No Encontrado',
   confirm: 'Confirmado',
   error: 'Ha ocurrído un error',
@@ -34,7 +35,8 @@ const resMsg = {
   tokenExp: 'El token ha expirado',
   tokenInvalid: 'El token no es válido',
   extensionInvalid: 'La extencion es inválida',
-  limit_fileSize: 'El archivo supero el tamaño aceptado'
+  limit_fileSize: 'El archivo supero el tamaño aceptado',
+  limit_unexpectedFiles: 'Se ha superado el limite de archivos para subir'
 };
 
 
