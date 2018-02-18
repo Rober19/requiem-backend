@@ -2,6 +2,7 @@
 const path = require('path');
 const config = require('../config/config');
 
+//aqui requerimos multer para validar la subida de archivos
 const multer = require('multer');
 
 
@@ -14,15 +15,16 @@ const multer = require('multer');
 
 exports.image_valid = function (req, res, next) {
 
+  //configuramos el Storage para que nombre el archivo y lo ubique cuando sea descargado
   const storage = multer.diskStorage({
     destination: './uploads/users/',
     filename: (req, file, cb) => {
       cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
   });
-
+  // establecemos el tamaño maximo que podran tener la imagenes en este caso
   const maxSize_image = 3 * 1024 * 1024;
-
+  // configuramos el upload, estableciendo limites y filtros para subir solo archivos validos
   const upload = multer({
     dest: './uploads/users/',
     limits: { fileSize: maxSize_image },
@@ -35,9 +37,10 @@ exports.image_valid = function (req, res, next) {
       cb(null, true);
     }
   });
-  
+  //establecemos que se subirá aquel dato que en body se llame ('image')
   const md_image = upload.any('image');
 
+  //aqui se procesaran los datos a ver si todo es valido
   md_image(req, res, (err) => {
 
     if (req.fileValidationError) {
@@ -46,7 +49,7 @@ exports.image_valid = function (req, res, next) {
 
     if (err) return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_image / 1048576}MB`), 500));
 
-    // return res.status(200).send(config.resJson((config.resMsg.confirm + ext_file), 200));
+    next();
   })
 
 

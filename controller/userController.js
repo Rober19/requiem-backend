@@ -190,10 +190,10 @@ function updateUser(req, res) {
 }
 
 function uploadImage(req, res) {
-  
+
   const user_id = req.params.id;
 
-  return res.status(200).send(config.resJson(config.resMsg.confirm, 200));
+  return res.status(200).send(config.resJson(config.resMsg.CreateOK, 200));
 
 }
 
