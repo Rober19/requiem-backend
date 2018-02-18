@@ -1,10 +1,20 @@
 'use strict'
 
+// la configuracion previa para el desarrollo
 const config = require('../config/config');
+// la depnd de paginacion
 const dbPaginate = require('mongoose-pagination');
+// el modelo USUARIO de mongoose
 const dbUser = require('../model/user');
+// la depnd de encriptamiento para contraseñas
 const bcrypt = require('bcrypt-nodejs');
+// la depnd de encriptamiento para datos del usuario(en tokens)
 const jwt = require('../services/jwt');
+// libreria para trabajar con archivos FILE SYSTEM
+const fs = require('fs');
+// trabajar con rutas del sistema de ficheros
+const path = require('path');
+//
 
 // validador de la contraseña traida por el res.body
 function Passcrypt(password) {
@@ -30,14 +40,14 @@ function User(req) {
 
 // ESTO ESTA OBSOLETO HASTA EL MOMENTO
 function findUser(filter) {
-  
-  var a = 777; 
+
+  var a = 777;
   console.log(1);
   dbUser.findOne(filter, (err, data) => {
     if (err) return err;
     if (data != null) return console.log(2);
-      
-  });  
+
+  });
   console.log(3);
   console.log('pasé')
   return a;
@@ -69,24 +79,24 @@ function createUser(req, res) {
 
 }
 // Este es el metodo de login
-function loginUser(req, res) {  
-// antes de hacer el login buscaremos si el email registrado existe
+function loginUser(req, res) {
+  // antes de hacer el login buscaremos si el email registrado existe
   dbUser.findOne({ email: User(req).email }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     if (data != null) {
-    // si existe pues procederemos a comprobar la contraseña registrada
+      // si existe pues procederemos a comprobar la contraseña registrada
 
-    //con esta const podremos ver si la contraseña es correcta o no
-    const validateLog = bcrypt.compareSync(req.body.password, data.password);  
+      //con esta const podremos ver si la contraseña es correcta o no
+      const validateLog = bcrypt.compareSync(req.body.password, data.password);
       if (validateLog) {
         //en caso de que sea correcta se haran los procesoces de logueo y de cifrado tokens
-        if(req.body.tokenget){          
+        if (req.body.tokenget) {
           return res.status(200).send(config.resJson(jwt.createToken(data), 200));
         } else {
           data.password = undefined;
           return res.status(200).send(config.resJson(data, 200));
         }
-        
+
 
       } else {
         //pero en caso de que no simplemente retornaremos que la contraseña es incorrecta
@@ -95,40 +105,40 @@ function loginUser(req, res) {
     } else {
       // sino pues evitaremos la comprobacion del resto de datos
       return res.status(404).send(config.resJson(config.resMsg.userNotFound, 404));
-    }    
-  }); 
+    }
+  });
 }
 
 
 function getUser(req, res) {
   const id_user = req.params.id;
-   
+
   dbUser.findOne({ _id: id_user }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
 
-    if (data != null){
-      if(req.body.tokenget){          
+    if (data != null) {
+      if (req.body.tokenget) {
         return res.status(200).send(config.resJson(jwt.createToken(data), 200));
       } else {
         data.password = undefined;
         return res.status(200).send(config.resJson(data, 200));
       }
     } else {
-      
+
     }
 
   });
 }
 
-function getUsers(req, res){
+function getUsers(req, res) {
 
   const identity_user_id = req.user.sub;
-  
+
   console.log(req.query);
 
   let Page = 1;
-  
-  if (req.query.page){
+
+  if (req.query.page) {
     Page = req.query.page;
   }
 
@@ -142,30 +152,86 @@ function getUsers(req, res){
     return res.status(200).send({
       users,
       total,
-      pages : Math.ceil(total/itemsPerPage)
+      pages: Math.ceil(total / itemsPerPage)
     })
-  });  
+  });
 
 }
 
-function updateUser(req, res){
+function updateUser(req, res) {
 
   const user_id = req.params.id;
-  const data_upt = User(req);
+  const data_upt = req.body;
 
   delete data_upt.password;
 
-  if (user_id != req.user.sub){
-    return res.status(500).send(config.resJson(config.resMsg.nonAuthHeader, 500));
+  if (user_id != req.user.sub) {
+    return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
   }
 
-  
+  dbUser.findOne({ _id: user_id }, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+
+    if (data != null) {
+      dbUser.findByIdAndUpdate({ _id: user_id }, data_upt, { new: true }, (err, data) => {
+        if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+
+        return res.status(200).send(config.resJson(data, 200));
+
+      });
+
+    } else {
+      if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    }
+
+  });
+
+
+}
+
+function uploadImage(req, res) {
+  const user_id = req.params.id;
+
+
+
+  if (req.files) {
+    //esta constante tiene el path del archivo
+    const file_path = req.files.image.path;
+    //esta constante tiene un array dividiendo la dirección del archivo
+    const file_split = file_path.split('\\');
+    //esta constante tiene el nombre y extension del archivo
+    const file_name = file_split[file_split.length - 1].split('\.');
+
+    const file_ext = file_name[file_name.length - 1].split('\.');
+
+    if (user_id != req.user.sub) {
+      return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
+      removeFiles(file_path);
+    }
+
+    if (file_ext == 'png' || file_ext == 'jpg') {
+      return res.status(200).send(config.resJson(file_ext, 200));
+    } else {
+      removeFiles(file_path);
+      return res.status(500).send(config.resJson(config.resMsg.extensionInvalid, 500));
+    }
+
+
+
+  }
+
+}
+
+function removeFiles(file_path) {
+  fs.unlink(file_path, (err) => {
+    
+  })
 }
 
 //esto es PARA UNA PRUEBA - ES OBSOLETO
 function halo(req, res) {
   const halo1 = findUser({ email: User(req).email });
-  res.status(200).send({halo1})
+  res.status(200).send({ halo1 })
 }
 
 
@@ -174,5 +240,6 @@ module.exports = {
   loginUser,
   getUser,
   getUsers,
-  halo
+  updateUser,
+  uploadImage
 }

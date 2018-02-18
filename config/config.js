@@ -32,7 +32,9 @@ const resMsg = {
   nonAuthHeader: 'La petición no tiene la cabecera de autenticación',
   nonAuth: 'No cumple con los permisos para hacer esta función',
   tokenExp: 'El token ha expirado',
-  tokenInvalid: 'El token no es válido'
+  tokenInvalid: 'El token no es válido',
+  extensionInvalid: 'La extencion es inválida',
+  limit_fileSize: 'El archivo supero el tamaño aceptado'
 };
 
 
