@@ -10,6 +10,39 @@ function test(req, res) {
   config.resTest(res);
 }
 
+function Follow(req) {
+  const dbFollow = {
+    user: req.user.sub,
+    followed: req.body.followed
+  }
+  return dbFollow;
+}
+
+function createFollow(req, res) {
+
+  dbFollow.findOne({
+    //usamos la estructura del OR de mongoose
+    $and: [{ user: Follow(req).user }, { followed: Follow(req).followed }]
+  }, (err, data) => {
+
+    if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500))
+
+    config.resTest(res);
+    
+    // //se tomaran los valores del usuario y se registrara el follow en la DB
+    // dbFollow.create(Follow(req), (err, data) => {
+    //   //si ocurre algun error pues lo retornaremos
+    //   if (err) return res.status(400).send(config.resJson(config.resMsg.userFollowedErr, 400));
+    //   //sino retornaremos un mensaje exitoso
+    //   res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
+    // });
+
+  });
+
+
+
+}
+
 module.exports = {
-  test
+  createFollow
 }

@@ -28,6 +28,6 @@ app.use(morgan('dev'));
 //rutas
 
 app.use('/app', userRouter);
-app.use('/follow', followRouter);
+app.use('/app-follow', followRouter);
 
 module.exports = app;

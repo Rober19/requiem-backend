@@ -70,7 +70,7 @@ function createUser(req, res) {
     } else {
       //de lo contrario, se tomaran los valores del usuario y se registraran en la DB
       dbUser.create(User(req), (err, data) => {
-        //si ocurre algun erro pues lo retornaremos
+        //si ocurre algun error pues lo retornaremos
         if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
         //sino retornaremos un mensaje exitoso
         res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
@@ -229,8 +229,6 @@ function getImageUser(req, res) {
   } else {
     return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
   }
-
-
 }
 
 

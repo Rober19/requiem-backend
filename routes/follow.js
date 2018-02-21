@@ -5,6 +5,6 @@ const app = express.Router();
 const middlw_auth = require('../middlewares/authenticated');
 const followController = require('../controller/followController');
 
-app.get('/test', middlw_auth.ensure_Auth, followController.test);
+app.post('/follow', middlw_auth.ensure_Auth, followController.createFollow);
 
 module.exports = app;

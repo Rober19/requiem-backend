@@ -19,6 +19,8 @@ const resMsg = {
   userNotFound: 'Usuario no encontrado',
   userFound: 'Usuario encontrado',
   userCreateOK: 'Usuario creado correctamente',
+  userFollowedOK: 'Usuario seguido correctamente',
+  userFollowedErr: 'Ha ocurrido un error al seguir al usuario',
   userCreateErr: 'Usuario no Creado',
   RegisterOK: 'Se ha registrado correctamente',
   RegisterErr: 'Ha ocurrido un error en el registro',
