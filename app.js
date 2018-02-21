@@ -6,8 +6,10 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const config = require('./config/config');
 const userRouter = require('./routes/user');
-// cargar rutas
+const followRouter = require('./routes/follow');
 
+
+//cors
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -21,10 +23,11 @@ app.use(bodyParser.json());
 
 app.use(morgan('dev'));
 
-//cors
+
 
 //rutas
 
 app.use('/app', userRouter);
+app.use('/follow', followRouter);
 
 module.exports = app;
