@@ -45,8 +45,13 @@ function resJson(msg, status) {
   return answer;
 }
 
+function resTest(res) {
+  res.status(200).send(resJson(resMsg.confirm, 200));
+}
+
 module.exports = {
   port,
   resMsg,
-  resJson
+  resJson,
+  resTest
 }
