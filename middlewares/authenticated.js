@@ -2,7 +2,7 @@
 
 const jwt = require('jwt-simple');
 const moment = require('moment');
-const config = require('../config/config')
+const config = require('../config/config');
 const secretKey = 'secret_token_summertime_sadness';
 
 exports.ensure_Auth = function (req, res, next) {  

@@ -11,10 +11,6 @@ const multer = require('multer');
 
 exports.image_valid = function (req, res, next) {
 
-  if (req.params.id != req.user.sub) {
-    return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
-  }
-
     // establecemos el tamaño maximo que podran tener la imagenes en este caso
     const maxSize_image = 3 * 1024 * 1024;
     const maxFile_image = 1;
@@ -26,7 +22,7 @@ exports.image_valid = function (req, res, next) {
     filename: (req, file, cb) => {
       const user_id_token = jwt.encode(req.user.sub, 'packet');
       let file_name = '';      
-      console.log(file);
+      
       if (path.extname(file.originalname) == '.gif') {
         file_name = user_id_token + '--' + Date.now() +'--' + path.extname(file.originalname)
       } else {

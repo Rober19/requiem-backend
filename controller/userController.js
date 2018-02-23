@@ -125,7 +125,7 @@ function getUser(req, res) {
         return res.status(200).send(config.resJson(data, 200));
       }
     } else {
-
+      return res.status(200).send(config.resJson(config.resMsg.userNotFound, 200));
     }
 
   });
@@ -165,6 +165,7 @@ function updateUser(req, res) {
   const data_upt = req.body;
 
   delete data_upt.password;
+  delete data_upt.image;
 
   if (user_id != req.user.sub) {
     return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
@@ -176,13 +177,13 @@ function updateUser(req, res) {
     if (data != null) {
       dbUser.findByIdAndUpdate({ _id: user_id }, data_upt, { new: true }, (err, data) => {
         if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
-
+        data.image = undefined;
         return res.status(200).send(config.resJson(data, 200));
 
       });
 
     } else {
-      if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+      res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
     }
 
   });
@@ -198,19 +199,26 @@ function uploadImage(req, res) {
   const heroku_backend = 'https://backend-mean5-project.herokuapp.com/app/get-image-user/'
 
   const path_file = './uploads/users/' + image_name;
+
   fs.renameSync(path_file, `./uploads/users/${img_user[0]}${img_user[2]}`);
   image_name = `${img_user[0]}${img_user[2]}`;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${heroku_backend}${image_name}` }, { new: true }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));    
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    
+    if (data != null) {
+      //este es el id del usuario descifrado de la imagen
+      const img_id_user = jwt.decode(img_user[0], 'packet');
 
-    //este es el id del usuario descifrado de la imagen
-    const img_id_user = jwt.decode(img_user[0], 'packet');
+      //para que no aparezca el hash de la contraseña
+      data.password = undefined;
+      return res.status(200).send(config.resJson(data, 200));
 
-    //para que no aparezca el hash de la contraseña
-    data.password = undefined;
+    } else {
+      return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
+    }
 
-    return res.status(200).send(config.resJson(data, 200));
+
 
   });
 }
