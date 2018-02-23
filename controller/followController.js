@@ -27,15 +27,22 @@ function createFollow(req, res) {
 
     if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500))
 
-    config.resTest(res);
     
-    // //se tomaran los valores del usuario y se registrara el follow en la DB
-    // dbFollow.create(Follow(req), (err, data) => {
-    //   //si ocurre algun error pues lo retornaremos
-    //   if (err) return res.status(400).send(config.resJson(config.resMsg.userFollowedErr, 400));
-    //   //sino retornaremos un mensaje exitoso
-    //   res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
-    // });
+
+    if (data == null) {
+      //se tomaran los valores del usuario y se registrara el follow en la DB
+      dbFollow.create(Follow(req), (err, data) => {
+        //si ocurre algun error pues lo retornaremos
+        if (err) return res.status(400).send(config.resJson(config.resMsg.userFollowedErr, 400));
+        //sino retornaremos un mensaje exitoso
+        res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
+      });
+    } else {
+      //res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
+      res.status(200).send(config.resJson(data, 200));
+    }
+ 
+
 
   });
 
