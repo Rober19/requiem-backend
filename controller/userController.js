@@ -195,12 +195,13 @@ function uploadImage(req, res) {
   const user_id = req.params.id;
   let image_name = req.file_name;
   const img_user = image_name.split('\--');
+  const heroku_backend = 'https://backend-mean5-project.herokuapp.com/app/get-image-user/'
 
   const path_file = './uploads/users/' + image_name;
   fs.renameSync(path_file, `./uploads/users/${img_user[0]}${img_user[2]}`);
   image_name = `${img_user[0]}${img_user[2]}`;
 
-  dbUser.findByIdAndUpdate({ _id: user_id }, { image: image_name }, { new: true }, (err, data) => {
+  dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${heroku_backend}${image_name}` }, { new: true }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));    
 
     //este es el id del usuario descifrado de la imagen

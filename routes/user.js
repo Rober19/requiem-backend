@@ -35,7 +35,6 @@ app.get('*', (req, res) => {
   res.status(200).send(config.resJson(config.resMsg.notfound));
 });
 
-
 // este es de prueba get
 app.get('/get', (req, res) => {
   res.status(200).send('conecté');
