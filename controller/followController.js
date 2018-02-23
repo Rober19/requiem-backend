@@ -71,7 +71,7 @@ function deleteFollow(req, res) {
 }
 
 function getFollowingUsers(req, res) {
-  const user_id = req.user.sub;
+  const user_id = req.params.id;
 
   let Page = 1;
 
@@ -81,7 +81,32 @@ function getFollowingUsers(req, res) {
 
   let itemsPerPage = 4;
 
-  dbFollow.find({ user: user_id }).populate({ path: '' }).paginate(Page, itemsPerPage, (err, users, total) => {
+  dbFollow.find({ user: user_id }).populate({ path: 'followed' }).paginate(Page, itemsPerPage, (err, users, total) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+
+    if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
+
+    return res.status(200).send({
+      users,
+      total,
+      pages: Math.ceil(total / itemsPerPage)
+    })
+  });
+
+}
+
+function getFollowersUsers(req, res) {
+  const user_id = req.params.id;
+
+  let Page = 1;
+
+  if (req.query.page) {
+    Page = req.query.page;
+  }
+
+  let itemsPerPage = 4;
+
+  dbFollow.find({ followed: user_id }).populate({ path: 'user' }).paginate(Page, itemsPerPage, (err, users, total) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
 
     if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
@@ -98,5 +123,6 @@ function getFollowingUsers(req, res) {
 module.exports = {
   createFollow,
   deleteFollow,
-  getFollowingUsers
+  getFollowingUsers,
+  getFollowersUsers
 }

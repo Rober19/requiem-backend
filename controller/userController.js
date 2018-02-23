@@ -35,7 +35,7 @@ function User(req) {
     nick: req.body.nick,
     email: req.body.email,
     password: Passcrypt(req.body.password),
-    image: 'default-user.png'
+    image: 'https://backend-mean5-project.herokuapp.com/app/get-image-user/default-user.png'
   }
   return user;
 }
@@ -161,7 +161,7 @@ function getUsers(req, res) {
 
 function updateUser(req, res) {
 
-  const user_id = req.params.id;
+  const user_id = req.user.sub;
   const data_upt = req.body;
 
   delete data_upt.password;
@@ -192,7 +192,7 @@ function updateUser(req, res) {
 
 function uploadImage(req, res) {
 
-  const user_id = req.params.id;
+  const user_id = req.user.sub;
   let image_name = req.file_name;
   const img_user = image_name.split('\--');
   const heroku_backend = 'https://backend-mean5-project.herokuapp.com/app/get-image-user/'
