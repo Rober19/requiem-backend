@@ -60,9 +60,7 @@ function resJson(msg, status) {
 function resTest(res) {
   res.status(200).send(resJson(resMsg.confirm, 200));
 }
-function resTest(res, data) {
-  res.status(200).send(resJson(data, 200));
-}
+
 
 module.exports = {
   port,

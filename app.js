@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const config = require('./config/config');
 const userRouter = require('./routes/user');
+const publicationRouter = require('./routes/publication');
 const followRouter = require('./routes/follow');
 
 
@@ -28,6 +29,7 @@ app.use(morgan('dev'));
 //rutas
 
 app.use('/app', userRouter);
+app.use('/app-publication', publicationRouter);
 app.use('/app-follow', followRouter);
 
 module.exports = app;
