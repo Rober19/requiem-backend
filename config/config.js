@@ -43,7 +43,8 @@ const resMsg = {
   tokenInvalid: 'El token no es válido',
   extensionInvalid: 'La extencion es inválida',
   limit_fileSize: 'El archivo supero el tamaño aceptado',
-  limit_unexpectedFiles: 'Se ha superado el limite de archivos para subir'
+  limit_unexpectedFiles: 'Se ha superado el limite de archivos para subir',
+  requiredFile: 'No se ha enviado el archivo requerido'
 };
 
 

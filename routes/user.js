@@ -29,7 +29,7 @@ app.get('/get-image-user/:imageFile', userController.getImageUser)
 
 app.use(function (err, req, res, next) {  
   res.status(500).send('Something broke!')
-})
+});
 
 app.get('*', (req, res) => {
   res.status(200).send(config.resJson(config.resMsg.notfound));

@@ -10,4 +10,9 @@ app.post('/unfollow', middlw_auth.ensure_Auth, followController.deleteFollow);
 app.get('/following/:id', middlw_auth.ensure_Auth, followController.getFollowingUsers);
 app.get('/followers/:id', middlw_auth.ensure_Auth, followController.getFollowersUsers);
 
+
+app.use(function (err, req, res, next) {  
+  res.status(500).send('Something broke!')
+})
+
 module.exports = app;
