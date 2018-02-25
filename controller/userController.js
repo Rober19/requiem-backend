@@ -40,21 +40,6 @@ function User(req) {
   return user;
 }
 
-// ESTO ESTA OBSOLETO HASTA EL MOMENTO
-function findUser(filter) {
-
-  var a = 777;
-  console.log(1);
-  dbUser.findOne(filter, (err, data) => {
-    if (err) return err;
-    if (data != null) return console.log(2);
-
-  });
-  console.log(3);
-  console.log('pasé')
-  return a;
-}
-
 // Este es el metodo de registro
 function createUser(req, res) {
   //debemos comprobar si el email o el nick existen en la DB
@@ -118,7 +103,7 @@ function getUser(req, res) {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
 
     if (data != null) {
-      if (req.body.tokenget) {
+      if (req.headers.admin_secret == config.admin_secret) {
         return res.status(200).send(config.resJson(jwt_user.createToken(data), 200));
       } else {
         data.password = undefined;
@@ -206,7 +191,7 @@ function uploadImage(req, res) {
     
     if (data != null) {
       //este es el id del usuario descifrado de la imagen
-      const img_id_user = jwt.decode(img_user[0], 'packet');
+      const img_id_user = jwt.decode(img_user[0], config.secret_name_image);
 
       //para que no aparezca el hash de la contraseña
       data.password = undefined;

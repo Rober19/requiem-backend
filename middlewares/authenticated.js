@@ -3,7 +3,6 @@
 const jwt = require('jwt-simple');
 const moment = require('moment');
 const config = require('../config/config');
-const secretKey = 'secret_token_summertime_sadness';
 const dbUser = require('../model/user');
 
 exports.ensure_Auth = function (req, res, next) {
@@ -18,7 +17,7 @@ exports.ensure_Auth = function (req, res, next) {
   //luego decodificaremos el token, pero para evitar errores, se validara en el try-catch
   try {
     //decodificar    
-    var userToken = jwt.decode(token, secretKey);
+    var userToken = jwt.decode(token, config.secret_user_token);
     //si la fecha de expiracion del token es menor o igual a la actual pues el token no servirá
     if (userToken.exp <= moment().unix()) {
       //retornaremos como respuesta que el token ha expirado

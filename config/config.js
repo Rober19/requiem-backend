@@ -48,6 +48,9 @@ const resMsg = {
   userFollowNotSelf: 'No puedes seguirte a ti mismo'
 };
 
+const admin_secret = 'givemethetoken';
+const secret_name_image = 'packet';
+const secret_user_token = 'secret_token_summertime_sadness';
 
 function resJson(msg, status) {
   const answer = { data: msg, status: status}
@@ -65,5 +68,8 @@ module.exports = {
   port,
   resMsg,
   resJson,
-  resTest
+  resTest,
+  secret_name_image,
+  secret_user_token,
+  admin_secret
 }

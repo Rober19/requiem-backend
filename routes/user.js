@@ -18,6 +18,7 @@ app.post('/register', userController.createUser);
 app.post('/login', userController.loginUser);
 // esta peticion trae un usuario segun su Id
 app.get('/user/:id', userController.getUser);
+app.get('/user/:id', middle_auth.ensure_Auth, userController.getUser);
 // esta petición trae todos los usuarios paginados
 app.get('/users', middle_auth.ensure_Auth, userController.getUsers);
 //esta petición modifica los datos del usuario en sesion

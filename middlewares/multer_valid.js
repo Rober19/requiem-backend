@@ -19,7 +19,7 @@ exports.image_valid = function (req, res, next) {
   const storage = multer.diskStorage({
     destination: './uploads/users/',
     filename: (req, file, cb) => {
-      const user_id_token = jwt.encode(req.user.sub, 'packet');
+      const user_id_token = jwt.encode(req.user.sub, config.secret_name_image);
       let file_name = '';
 
       if (path.extname(file.originalname) == '.gif') {

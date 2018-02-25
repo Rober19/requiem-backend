@@ -2,7 +2,8 @@
 
 const jwt = require('jwt-simple');
 const moment = require('moment');
-const secretKey = 'secret_token_summertime_sadness';
+const config = require('../config/config');
+const secretKey = config.secret_user_token;
 
 exports.createToken = function(user){
   const userToken = {
