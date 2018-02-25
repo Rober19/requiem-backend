@@ -4,12 +4,14 @@ const jwt = require('jwt-simple');
 const moment = require('moment');
 const config = require('../config/config');
 const secretKey = 'secret_token_summertime_sadness';
+const dbUser = require('../model/user');
 
-exports.ensure_Auth = function (req, res, next) {  
+exports.ensure_Auth = function (req, res, next) {
+
   //en caso de que no se reciba en la cabecera la autorizacion, pues se retornata un 403
-  if (!req.headers.authorization) 
+  if (!req.headers.authorization)
     return res.status(403).send(config.resJson(config.resMsg.nonAuthHeader, 403));
-  
+
   //sino, se recibira el token para decodificarlo
   //aqui recibimos el token y remplazamos las comillas ' o " por espacio vacio ''
   const token = req.headers.authorization.replace(/['"]+/g, '');
@@ -28,6 +30,21 @@ exports.ensure_Auth = function (req, res, next) {
   }
   req.user = userToken;
 
-  next();
+  dbUser.findOne(
+    //usamos la estructura del OR de mongoose
+    { _id: req.user.sub }
+    , (err, data) => {
+      if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+
+      if (data != null) {
+        next();
+      } else {
+        return res.status(500).send(config.resJson(`${config.resMsg.userNotFound} : ${config.resMsg.nonAuth}`, 500));
+      }
+
+    });
+
+
+
 
 }

@@ -18,7 +18,7 @@ const fs = require('fs');
 const path = require('path');
 //
 
-// validador de la contraseña traida por el res.body
+// validador de la contraseña traida por el req.body
 function Passcrypt(password) {
   if (password) {
     return bcrypt.hashSync(password);
@@ -64,7 +64,7 @@ function createUser(req, res) {
   }, (err, data) => {
     //aqui retoranremos errores
     if (err) return res.status(500).send(config.resJson(config.resMsg.RegisterErr, 500));
-    //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprovada
+    //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprobada
     if (data != null) {
       return res.status(400).send(config.resJson(config.resMsg.userExist, 400));
     } else {
@@ -131,25 +131,23 @@ function getUser(req, res) {
   });
 }
 
-function getUsers(req, res) {
-
-  const identity_user_id = req.user.sub;
-
-  console.log(req.query);
+function getUsers(req, res) { 
 
   let Page = 1;
 
   if (req.query.page) {
     Page = req.query.page;
+  } else {
+    return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
   }
 
   let itemsPerPage = 5;
 
-  dbUser.find().sort('_id').paginate(Page, itemsPerPage, (err, users, total) => {
+  dbUser.find({}).select(['-password']).sort('_id').paginate(Page, itemsPerPage, (err, users, total) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
 
     if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
-
+    
     return res.status(200).send({
       users,
       total,

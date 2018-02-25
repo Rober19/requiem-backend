@@ -5,6 +5,7 @@ const fs = require('fs');
 const config = require('../config/config');
 const mongoosePaginate = require('mongoose-pagination');
 const dbFollow = require('../model/follow');
+const dbUser = require('../model/user');
 
 function test(req, res) {
   config.resTest(res);
@@ -15,33 +16,49 @@ function Follow(req) {
     user: req.user.sub,
     followed: req.body.followed
   }
+
   return dbFollow;
 }
 
 function createFollow(req, res) {
 
-  dbFollow.findOne({
+  if (Follow(req).user == Follow(req).followed) return res.status(500).send(config.resJson(config.resMsg.userFollowNotSelf, 500));
+
+  dbUser.findOne(
     //usamos la estructura del OR de mongoose
-    $and: [{ user: Follow(req).user }, { followed: Follow(req).followed }]
-  }, (err, data) => {
+    { _id: Follow(req).followed }
+  , (err, data) => {
+    //aqui retoranremos errores
+    if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
+    //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprobada
+    if (data != null) {
 
-    if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500))
-
-
-
-    if (data == null) {
-      //se tomaran los valores del usuario y se registrara el follow en la DB
-      dbFollow.create(Follow(req), (err, data) => {
-        //si ocurre algun error pues lo retornaremos
-        if (err) return res.status(400).send(config.resJson(config.resMsg.userFollowedErr, 400));
-        //sino retornaremos un mensaje exitoso
-        res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
+      dbFollow.findOne({
+        //usamos la estructura del OR de mongoose
+        $and: [{ user: Follow(req).user }, { followed: Follow(req).followed }]
+      }, (err, data) => {
+        if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
+        if (data == null) {
+          //se tomaran los valores del usuario y se registrara el follow en la DB
+          dbFollow.create(Follow(req), (err, data) => {
+            //si ocurre algun error pues lo retornaremos
+            if (err) return res.status(400).send(config.resJson(config.resMsg.userFollowedErr, 400));
+            //sino retornaremos un mensaje exitoso
+            res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
+          });
+        } else {
+          res.status(200).send(config.resJson(config.resMsg.userFollowedExist, 200));
+        }
       });
-    } else {
-      res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
 
+    } else {
+      res.status(200).send(config.resJson(config.resMsg.userNotFound, 200));
     }
+
   });
+
+
+
 }
 
 function deleteFollow(req, res) {

@@ -44,7 +44,8 @@ const resMsg = {
   extensionInvalid: 'La extencion es inválida',
   limit_fileSize: 'El archivo supero el tamaño aceptado',
   limit_unexpectedFiles: 'Se ha superado el limite de archivos para subir',
-  requiredFile: 'No se ha enviado el archivo requerido'
+  requiredFile: 'No se ha enviado el archivo requerido',
+  userFollowNotSelf: 'No puedes seguirte a ti mismo'
 };
 
 
