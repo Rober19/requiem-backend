@@ -29,13 +29,6 @@ app.get('/get-image-user/:imageFile', userController.getImageUser);
 
 app.get('/get-counters/:id', userController.getUser_Counters)
 
-app.use(function (err, req, res, next) {  
-  res.status(500).send('Something broke!')
-});
-
-app.get('*', (req, res) => {
-  res.status(200).send(config.resJson(config.resMsg.notfound));
-});
 
 // este es de prueba get
 app.get('/get', (req, res) => {

@@ -11,8 +11,6 @@ app.get('/following/:id', middlw_auth.ensure_Auth, followController.getFollowing
 app.get('/followers/:id', middlw_auth.ensure_Auth, followController.getFollowersUsers);
 
 
-app.use(function (err, req, res, next) {  
-  res.status(500).send('Something broke!')
-})
+
 
 module.exports = app;

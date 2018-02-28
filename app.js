@@ -28,8 +28,14 @@ app.use(morgan('dev'));
 
 //rutas
 
-app.use('/app', userRouter);
-app.use('/app-publication', publicationRouter);
 app.use('/app-follow', followRouter);
+app.use('/app', publicationRouter);
+app.use('/app', userRouter);
+
+app.use(function (err, req, res, next) {  
+  res.status(500).send('Something broke!')
+})
+
+
 
 module.exports = app;
