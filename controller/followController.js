@@ -22,16 +22,16 @@ function Follow(req) {
 
 function createFollow(req, res) {
 
-  if (Follow(req).user == Follow(req).followed) return res.status(500).send(config.resJson(config.resMsg.userFollowNotSelf, 500));
+  // if (Follow(req).user == Follow(req).followed) return res.status(500).send(config.resJson(config.resMsg.userFollowNotSelf, 500));
 
-  dbUser.findOne(
-    //usamos la estructura del OR de mongoose
-    { _id: Follow(req).followed }
-  , (err, data) => {
-    //aqui retoranremos errores
-    if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
-    //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprobada
-    if (data != null) {
+  // dbUser.findOne(
+    
+  //   { _id: Follow(req).followed }
+  // , (err, data) => {
+  //   //aqui retoranremos errores
+  //   if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
+  //   //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprobada
+  //   if (data != null) {
 
       dbFollow.findOne({
         //usamos la estructura del OR de mongoose
@@ -51,11 +51,11 @@ function createFollow(req, res) {
         }
       });
 
-    } else {
-      res.status(200).send(config.resJson(config.resMsg.userNotFound, 200));
-    }
+  //   } else {
+  //     res.status(200).send(config.resJson(config.resMsg.userNotFound, 200));
+  //   }
 
-  });
+  //  });
 
 
 

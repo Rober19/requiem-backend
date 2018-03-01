@@ -7,6 +7,6 @@ const middle_file = require('../middlewares/multer_valid');
 const config = require('../config/config');
 const publicationController = require('../controller/publicationController');
 
-app.get('/test', publicationController.test);
+app.post('/publication', middle_auth.ensure_Auth, publicationController.createPublication);
 
 module.exports = app;

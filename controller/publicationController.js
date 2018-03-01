@@ -11,10 +11,28 @@ const dbFollow = require('../model/follow');
 const dbUser = require('../model/user');
 
 
-function test(req, res){
-  config.resTest(res);
+function modelPub(req) {
+  const publication = {
+    text: req.body.text,
+    file: null,
+    created_at: moment().unix(),
+    user: req.user.sub
+  }
+  return publication;
+}
+
+function createPublication(req, res) {    
+      //se tomaran los valores
+      dbPublication.create(modelPub(req), (err, data) => {
+        //si ocurre algun error pues lo retornaremos
+        if (err) return res.status(400).send(config.resJson(config.resMsg.error, 400));
+        //sino retornaremos un mensaje exitoso
+        res.status(200).send(config.resJson(config.resMsg.confirm, 200));
+      });
+    
+  
 }
 
 module.exports = {
-  test
+  createPublication
 }
