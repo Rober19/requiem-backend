@@ -28,10 +28,10 @@ function createPublication(req, res) {
         if (err) return res.status(400).send(config.resJson(config.resMsg.error, 400));
         //sino retornaremos un mensaje exitoso
         res.status(200).send(config.resJson(config.resMsg.confirm, 200));
-      });
-    
-  
+      });  
 }
+
+
 
 module.exports = {
   createPublication
