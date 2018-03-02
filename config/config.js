@@ -45,7 +45,12 @@ const resMsg = {
   limit_fileSize: 'El archivo supero el tamaño aceptado',
   limit_unexpectedFiles: 'Se ha superado el limite de archivos para subir',
   requiredFile: 'No se ha enviado el archivo requerido',
-  userFollowNotSelf: 'No puedes seguirte a ti mismo'
+  userFollowNotSelf: 'No puedes seguirte a ti mismo',
+  publicationErr: 'Ha ocurrido un error al guardar la publicacion',
+  publicationsBackErr: 'Ha ocurrido un error al devolver publicaciones',
+  publicationSavedOk: 'Publicacion guardad con exito',
+  publicationNotFound: 'No existen o no se han encontrado publicaciones',
+  
 };
 
 const admin_secret = 'givemethetoken';
