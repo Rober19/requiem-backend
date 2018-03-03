@@ -17,6 +17,7 @@ function message(req) {
     emitter: req.user.sub,
     receiver: req.body.receiver,
     text: req.body.text,
+    seen: false,
     created_at: moment().unix()
   }
   return message;
@@ -95,8 +96,31 @@ function getEmittMessage(req, res) {
 
 }
 
+function getUnviewedMessage(req, res) {
+  // aqui estara el params.id 
+  const user_id = req.user.sub;
+
+  // buscaremos el usuario y mostraremos sus seguidores
+  dbMessage.count({ receiver: user_id, seen: 'false' }).exec((err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+
+    return res.status(200).send({ unviewed: data });
+  });
+}
+
+function setViewedMessages(req, res) {
+  const user_id = req.user.sub;
+
+  dbMessage.update({ receiver: user_id, seen: 'false' }, { seen: 'true' }, { "multi": true }, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+
+    return res.status(200).send({ Messages: data.nModified });
+  })
+}
 module.exports = {
   getReceivedMessage,
   createMessage,
-  getEmittMessage
+  getEmittMessage,
+  getUnviewedMessage,
+  setViewedMessages
 }
