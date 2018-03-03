@@ -295,7 +295,7 @@ function uploadImage(req, res) {
 //#region getImageUser
 function getImageUser(req, res) {
   const image_file = req.params.imageFile;
-  const path_file = './uploads/users/' + image_file;
+  const path_file = `./uploads/users/${req.params.id}/${image_file}`;
 
   if (image_file) {
     fs.exists(path_file, (data) => {
