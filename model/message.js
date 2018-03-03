@@ -6,14 +6,25 @@ const mongoose = require('../config/db-mongoose');
 const message = mongoose.Schema({
   emitter: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: [true, config.resMsg.fieldRequired]
   },
   receiver:{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: [true, config.resMsg.fieldRequired]
   },
-  text: String,
-  created_at: String
+  text: {
+    type: String,
+    required: [true, config.resMsg.fieldRequired]
+  },
+  seen:{
+    type: String    
+  },
+  created_at: {
+    type: String,
+    required: [true, config.resMsg.fieldRequired]
+  }
 });
 
 module.exports = mongoose.model('message', message);

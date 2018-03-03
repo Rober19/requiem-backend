@@ -8,6 +8,7 @@ const config = require('./config/config');
 const userRouter = require('./routes/user');
 const publicationRouter = require('./routes/publication');
 const followRouter = require('./routes/follow');
+const messageRouter = require('./routes/message');
 
 
 //cors
@@ -23,12 +24,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(morgan('dev'));
-
-
-
 //rutas
 
-app.use('/app-follow', followRouter);
+app.use('/app', followRouter);
+app.use('/app', messageRouter);
 app.use('/app', publicationRouter);
 app.use('/app', userRouter);
 
