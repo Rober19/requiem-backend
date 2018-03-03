@@ -59,6 +59,7 @@ function createUser(req, res) {
         //si ocurre algun error pues lo retornaremos
         if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
         //sino retornaremos un mensaje exitoso
+        fs.mkdirSync(`./uploads/users/${data.id}`);        
         res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
       });
     }
@@ -266,9 +267,9 @@ function uploadImage(req, res) {
   const img_user = image_name.split('\--');
   const heroku_backend = 'https://backend-mean5-project.herokuapp.com/app/get-image-user/'
 
-  const path_file = './uploads/users/' + image_name;
+  const path_file = `./uploads/users/${user_id}/${image_name}`;
 
-  fs.renameSync(path_file, `./uploads/users/${img_user[0]}${img_user[2]}`);
+  fs.renameSync(path_file, `./uploads/users/${user_id}/${img_user[0]}${img_user[2]}`);
   image_name = `${img_user[0]}${img_user[2]}`;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${heroku_backend}${image_name}` }, { new: true }, (err, data) => {

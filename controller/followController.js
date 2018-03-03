@@ -137,6 +137,41 @@ function getFollowersUsers(req, res) {
 
 }
 
+function uploadImage(req, res) {
+
+  const user_id = req.user.sub;
+  let image_name = req.file_name;
+
+  const img_user = image_name.split('\--');
+  const heroku_backend = 'https://backend-mean5-project.herokuapp.com/app/get-image-user/'
+
+  const path_file = './uploads/users/' + image_name;
+  
+  image_name = `publication--${img_user[0]}${img_user[2]}`;
+  fs.renameSync(path_file, `./uploads/users/${image_name}`);
+  
+
+  dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${heroku_backend}${image_name}` }, { new: true }, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+
+    if (data != null) {
+      //este es el id del usuario descifrado de la imagen
+      const img_id_user = jwt.decode(img_user[0], config.secret_name_image);
+
+      //para que no aparezca el hash de la contraseña
+      data.password = undefined;
+      return res.status(200).send(config.resJson(data, 200));
+
+    } else {
+      return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
+    }
+
+
+
+  });
+}
+
+
 module.exports = {
   createFollow,
   deleteFollow,

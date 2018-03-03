@@ -14,10 +14,11 @@ exports.image_valid = function (req, res, next) {
   // establecemos el tamaño maximo que podran tener la imagenes en este caso
   const maxSize_image = 3 * 1024 * 1024;
   const maxFile_image = 1;
+  const dest_dir = `./uploads/users/${req.user.sub}/`
 
   //configuramos el Storage para que nombre el archivo y lo ubique cuando sea descargado
   const storage = multer.diskStorage({
-    destination: './uploads/users/',
+    destination: dest_dir,
     filename: (req, file, cb) => {
       const user_id_token = jwt.encode(req.user.sub, config.secret_name_image);
       let file_name = '';
@@ -49,7 +50,7 @@ exports.image_valid = function (req, res, next) {
       }
 
     },
-    dest: './uploads/users/',
+    dest: dest_dir,
     storage: storage
   });
 
@@ -80,7 +81,7 @@ exports.image_valid = function (req, res, next) {
 
 exports.file_valid = function (req, res, next) {
 
-  const dest_dir = './uploads/users/';
+  const dest_dir = `./uploads/users/${req.user.sub}/`;
   let ext_file = null;
 
   const storage = multer.diskStorage({
