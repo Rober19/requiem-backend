@@ -2,7 +2,7 @@
 
 const path = require('path');
 const config = require('../config/config');
-
+const moment = require('moment')
 const jwt = require('jwt-simple');
 
 //aqui requerimos multer para validar la subida de archivos
@@ -76,32 +76,59 @@ exports.image_valid = function (req, res, next) {
     next();
   })
 
-
 }
 
 exports.file_valid = function (req, res, next) {
 
-  const dest_dir = `./uploads/users/${req.user.sub}/`;
-  let ext_file = null;
+  // establecemos el tamaño maximo
+  const maxSize_file = 3 * 1024 * 1024;
+  const maxFile = 1;
+  const dest_dir = `./uploads/users/${req.user.sub}/`
 
+  //configuramos el Storage para que nombre el archivo y lo ubique cuando sea descargado
   const storage = multer.diskStorage({
     destination: dest_dir,
     filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-      ext_file = path.extname(file.originalname);
-      console.log(path.extname(file.originalname));
+      let file_name = `pub-${moment().unix()}${path.extname(file.originalname)}`;
+
+      cb(null, file_name);
+      req.file_name = file_name;
+
     }
   });
 
-  const maxSize_image = 7 * 1024 * 1024;
+  // configuramos el upload, estableciendo limites y filtros para subir solo archivos validos
+  const upload = multer({
 
-  const upload = multer({ dest: dest_dir, limits: { fileSize: maxSize_image }, storage });
-  const md_file = upload.any('file');
+    limits: { fileSize: maxSize_image },
+    fileFilter: function (req, file, cb) {
 
-  md_file(req, res, (err) => {
-    if (err) return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_image / 1048576}MB`), 500));
-
-    return res.status(200).send(config.resJson((config.resMsg.confirm), 200));
+      cb(null, true);
+    },
+    dest: dest_dir,
+    storage: storage
   });
+
+  //establecemos que se subirá aquel dato que en body se llame ('file')
+  const md_image = upload.fields([{ name: 'file', maxCount: maxFile_image }]);
+
+  //aqui se procesaran los datos a ver si todo es valido
+  md_image(req, res, (err) => {
+
+    if (req.files.file == undefined) return res.status(500).send(config.resJson(config.resMsg.requiredFile, 500));
+
+    if (req.fileValidationError) {
+      return res.status(500).send(config.resJson(req.fileValidationError, 500));
+    }
+
+    if (err && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(500).send(config.resJson((config.resMsg.limit_unexpectedFiles + ` : ${maxFile_image} ${config.resMsg.file}`), 500));
+
+    if (err && err.code == 'LIMIT_FILE_SIZE') return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_image / 1048576}MB`), 500));
+
+    if (err) return res.status(500).send(config.resJson((err), 500));
+
+
+    next();
+  })
 
 }

@@ -286,22 +286,20 @@ function uploadImage(req, res) {
     } else {
       return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
     }
-
-
-
   });
 }
 
 //#region getImageUser
 function getImageUser(req, res) {
   const image_file = req.params.imageFile;
-  if (image_file == 'default-user.png'){
-    return res.status(200).sendFile(path.resolve(`./uploads/users/${image_file}`));
-  }
-
-  const path_file = `./uploads/users/${req.params.id}/${image_file}`;
-
+  // si existe image_file
   if (image_file) {
+
+    const path_file = `./uploads/users/${req.params.id}/${image_file}`;
+    //si image_file es igual al nombre de la imagen por defecto
+    if (image_file == 'default-user.png') {
+      return res.status(200).sendFile(path.resolve(`./uploads/users/${image_file}`));
+    }
     fs.exists(path_file, (data) => {
       if (data) {
         res.status(200).sendFile(path.resolve(path_file));

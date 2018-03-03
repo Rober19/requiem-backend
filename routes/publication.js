@@ -12,4 +12,9 @@ app.get('/publication/:id', middle_auth.ensure_Auth, publicationController.getPu
 app.get('/publications', middle_auth.ensure_Auth, publicationController.getPublications);
 app.delete('/publication/:id', middle_auth.ensure_Auth, publicationController.deletePublication);
 
+
+app.post('/upload-image-pub/:id', [middle_auth.ensure_Auth, middle_file.file_valid], publicationController.uploadImagePub);
+
+app.get('/get-image-pub/:id/:imageFile', publicationController.getImagePub);
+
 module.exports = app;
