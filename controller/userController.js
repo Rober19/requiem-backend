@@ -292,6 +292,7 @@ function uploadImage(req, res) {
   });
 }
 
+//#region getImageUser
 function getImageUser(req, res) {
   const image_file = req.params.imageFile;
   const path_file = './uploads/users/' + image_file;
@@ -308,6 +309,7 @@ function getImageUser(req, res) {
     return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
   }
 }
+//#endregion 
 
 module.exports = {
   createUser,
