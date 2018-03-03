@@ -90,19 +90,15 @@ exports.file_valid = function (req, res, next) {
     destination: dest_dir,
     filename: (req, file, cb) => {
       let file_name = `pub-${moment().unix()}${path.extname(file.originalname)}`;
-
       cb(null, file_name);
       req.file_name = file_name;
-
     }
   });
 
   // configuramos el upload, estableciendo limites y filtros para subir solo archivos validos
   const upload = multer({
-
-    limits: { fileSize: maxSize_image },
+    limits: { fileSize: maxSize_file },
     fileFilter: function (req, file, cb) {
-
       cb(null, true);
     },
     dest: dest_dir,
@@ -110,20 +106,16 @@ exports.file_valid = function (req, res, next) {
   });
 
   //establecemos que se subirá aquel dato que en body se llame ('file')
-  const md_image = upload.fields([{ name: 'file', maxCount: maxFile_image }]);
+  const md_image = upload.fields([{ name: 'file', maxCount: maxFile }]);
 
   //aqui se procesaran los datos a ver si todo es valido
   md_image(req, res, (err) => {
 
     if (req.files.file == undefined) return res.status(500).send(config.resJson(config.resMsg.requiredFile, 500));
 
-    if (req.fileValidationError) {
-      return res.status(500).send(config.resJson(req.fileValidationError, 500));
-    }
+    if (err && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(500).send(config.resJson((config.resMsg.limit_unexpectedFiles + ` : ${maxFile} ${config.resMsg.file}`), 500));
 
-    if (err && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(500).send(config.resJson((config.resMsg.limit_unexpectedFiles + ` : ${maxFile_image} ${config.resMsg.file}`), 500));
-
-    if (err && err.code == 'LIMIT_FILE_SIZE') return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_image / 1048576}MB`), 500));
+    if (err && err.code == 'LIMIT_FILE_SIZE') return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_file / 1048576}MB`), 500));
 
     if (err) return res.status(500).send(config.resJson((err), 500));
 

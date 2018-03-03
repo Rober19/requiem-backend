@@ -7,6 +7,7 @@ const dbPaginate = require('mongoose-pagination');
 // el modelo USUARIO de mongoose
 const dbUser = require('../model/user');
 const dbFollow = require('../model/follow');
+const dbPublication = require('../model/publication');
 // la depnd de encriptamiento para contraseñas
 const bcrypt = require('bcrypt-nodejs');
 // la depnd de encriptamiento para datos del usuario(en tokens)
@@ -139,9 +140,15 @@ async function getUser_Counters(req, res) {
     return follow;
   });
 
+  let publications = await dbPublication.count({user: req.params.id}, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    return data;
+  });
+
   return res.status(200).send({
     following: following,
-    followers: followBack
+    followers: followBack,
+    publications: publications
   });
 
 }
@@ -174,12 +181,14 @@ async function follow_data(user, followed) {
 async function user_follows(user_id) {
 
   let following = await dbFollow.find({ user: user_id }, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     return data;
   }).select({ '_id': 0, '__v': 0, 'user': 0 });
 
   let followers = await dbFollow.find({ followed: user_id }, (err, data) => {
+    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     return data;
-  }).select({ '_id': 0, '__v': 0, 'followed': 0 });
+  }).select({ '_id': 0, '__v': 0, 'followed': 0 });  
 
   let following_ids = [];
   following.forEach((follows) => {
@@ -189,7 +198,7 @@ async function user_follows(user_id) {
   let followers_ids = [];
   followers.forEach((follows) => {
     followers_ids.push(follows.user);
-  });
+  });  
 
   return {
     following: following_ids,
