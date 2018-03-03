@@ -49,6 +49,8 @@ const resMsg = {
   publicationErr: 'Ha ocurrido un error al guardar la publicacion',
   publicationsBackErr: 'Ha ocurrido un error al devolver publicaciones',
   publicationSavedOk: 'Publicacion guardad con exito',
+  MessageSavedOk: 'Mensaje guardad con exito',
+  notMessage: 'No hay mensajes disponibles',
   publicationNotFound: 'No existen o no se han encontrado publicaciones',
   
 };
