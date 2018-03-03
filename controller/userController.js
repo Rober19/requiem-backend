@@ -265,7 +265,7 @@ function uploadImage(req, res) {
   const user_id = req.user.sub;
   let image_name = req.file_name;
   const img_user = image_name.split('\--');
-  const heroku_backend = 'https://backend-mean5-project.herokuapp.com/app/get-image-user/'
+  const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-image-user/${req.user.sub}/`
 
   const path_file = `./uploads/users/${user_id}/${image_name}`;
 
@@ -295,13 +295,11 @@ function uploadImage(req, res) {
 //#region getImageUser
 function getImageUser(req, res) {
   const image_file = req.params.imageFile;
-  const path_file;
-  if (req.params.id) {
-    path_file = `./uploads/users/${req.params.id}/${image_file}`;
-  } else {
-    path_file = `./uploads/users/${image_file}`;
+  if (image_file == 'default-user.png'){
+    return res.status(200).sendFile(path.resolve(`./uploads/users/${image_file}`));
   }
 
+  const path_file = `./uploads/users/${req.params.id}/${image_file}`;
 
   if (image_file) {
     fs.exists(path_file, (data) => {
