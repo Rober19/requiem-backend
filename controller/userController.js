@@ -59,7 +59,7 @@ function createUser(req, res) {
         //si ocurre algun error pues lo retornaremos
         if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
         //sino retornaremos un mensaje exitoso
-        fs.mkdirSync(`./uploads/users/${data.id}`);        
+        fs.mkdirSync(`./uploads/users/${data.id}`);
         res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
       });
     }
@@ -109,11 +109,11 @@ function getUser(req, res) {
         return res.status(200).send(config.resJson(jwt_user.createToken(data), 200));
       } else {
         data.password = undefined;
-        
-        follow_data(req.user.sub, id_user).then( value => {
-          return res.status(200).send(config.resJson({ data,  value}, 200));
+
+        follow_data(req.user.sub, id_user).then(value => {
+          return res.status(200).send(config.resJson({ data, value }, 200));
         });
-        
+
 
       }
     } else {
@@ -123,20 +123,20 @@ function getUser(req, res) {
   });
 }
 
-async function getUser_Counters(req, res) {  
+async function getUser_Counters(req, res) {
 
   let following = await dbFollow.count({
     user: req.params.id
   }, (err, follow) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
-    return follow;    
+    return follow;
   });
 
-  let followBack = await dbFollow.count({    
+  let followBack = await dbFollow.count({
     followed: req.params.id
   }, (err, follow) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
-    return follow;    
+    return follow;
   });
 
   return res.status(200).send({
@@ -153,7 +153,7 @@ async function follow_data(user, followed) {
     followed: followed
   }, (err, follow) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
-    return follow;    
+    return follow;
   });
 
   let followBack = await dbFollow.findOne({
@@ -161,7 +161,7 @@ async function follow_data(user, followed) {
     followed: user
   }, (err, follow) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
-    return follow;    
+    return follow;
   });
 
   return {
@@ -173,23 +173,23 @@ async function follow_data(user, followed) {
 
 async function user_follows(user_id) {
 
-  let following = await dbFollow.find({user: user_id}, (err, data) => {   
-    return data; 
-  }).select({'_id':0, '__v':0, 'user':0});
+  let following = await dbFollow.find({ user: user_id }, (err, data) => {
+    return data;
+  }).select({ '_id': 0, '__v': 0, 'user': 0 });
 
-  let followers = await dbFollow.find({followed: user_id}, (err, data) => {        
-    return data; 
-  }).select({'_id':0, '__v':0, 'followed':0});   
-   
+  let followers = await dbFollow.find({ followed: user_id }, (err, data) => {
+    return data;
+  }).select({ '_id': 0, '__v': 0, 'followed': 0 });
+
   let following_ids = [];
-  following.forEach( (follows) => {
-    following_ids.push(follows.followed);      
-  }); 
+  following.forEach((follows) => {
+    following_ids.push(follows.followed);
+  });
 
   let followers_ids = [];
-  followers.forEach( (follows) => {
-      followers_ids.push(follows.user);      
-    }); 
+  followers.forEach((follows) => {
+    followers_ids.push(follows.user);
+  });
 
   return {
     following: following_ids,
@@ -214,7 +214,7 @@ function getUsers(req, res) {
 
     if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
 
-    user_follows(req.user.sub).then( (value) => {      
+    user_follows(req.user.sub).then((value) => {
       return res.status(200).send({
         users,
         users_following: value.following,
@@ -223,7 +223,7 @@ function getUsers(req, res) {
         pages: Math.ceil(total / itemsPerPage)
       })
     });
-    
+
   });
 
 }
@@ -295,7 +295,13 @@ function uploadImage(req, res) {
 //#region getImageUser
 function getImageUser(req, res) {
   const image_file = req.params.imageFile;
-  const path_file = `./uploads/users/${req.params.id}/${image_file}`;
+  const path_file;
+  if (req.params.id) {
+    path_file = `./uploads/users/${req.params.id}/${image_file}`;
+  } else {
+    path_file = `./uploads/users/${image_file}`;
+  }
+
 
   if (image_file) {
     fs.exists(path_file, (data) => {
