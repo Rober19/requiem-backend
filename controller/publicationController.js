@@ -131,7 +131,7 @@ function uploadImagePub(req, res) {
 
 //#region getImageUser
 function getImagePub(req, res) {
-  res.redirect(`${config.ip_fetch.temp}/app/get-image-user/${req.params.id}/${req.params.imageFile}`);
+  res.redirect(`${config.ip_fetch.temp}/app/get-file-pub/${req.params.id}/${req.params.imageFile}`);
 }
 //#endregion 
 
