@@ -18,7 +18,7 @@ exports.image_valid = async function (req, res, next) {
   let data = await value.json();
 
   if (data.data == config.resMsg.confirm) {
-    next();
+    
   } else {
     return res.status(200).send(data);
   }
