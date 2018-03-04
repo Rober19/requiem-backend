@@ -100,7 +100,7 @@ function uploadImagePub(req, res) {
   const user_id = req.user.sub;
   const pub_id = req.params.id;
   let file_name = req.file_name;
-  const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-image-pub/${req.user.sub}/`
+  const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-file-pub/${req.user.sub}/`
 
   dbPublication.findOne({ _id: pub_id, user: req.user.sub }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
