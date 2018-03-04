@@ -60,11 +60,12 @@ function createUser(req, res) {
         //si ocurre algun error pues lo retornaremos
         if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
         //sino retornaremos un mensaje exitoso
-        fs.mkdirSync(`./uploads/users/${data.id}`);
+        req.headers.user = data.id;
+        fetch(`${config.ip_fetch.temp}/app/create-dir`, { method: 'POST', headers: req.headers });
+
         res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
       });
     }
-
   });
 
 }
@@ -140,7 +141,7 @@ async function getUser_Counters(req, res) {
     return follow;
   });
 
-  let publications = await dbPublication.count({user: req.params.id}, (err, data) => {
+  let publications = await dbPublication.count({ user: req.params.id }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     return data;
   });
@@ -188,7 +189,7 @@ async function user_follows(user_id) {
   let followers = await dbFollow.find({ followed: user_id }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     return data;
-  }).select({ '_id': 0, '__v': 0, 'followed': 0 });  
+  }).select({ '_id': 0, '__v': 0, 'followed': 0 });
 
   let following_ids = [];
   following.forEach((follows) => {
@@ -198,7 +199,7 @@ async function user_follows(user_id) {
   let followers_ids = [];
   followers.forEach((follows) => {
     followers_ids.push(follows.user);
-  });  
+  });
 
   return {
     following: following_ids,
@@ -270,12 +271,11 @@ function updateUser(req, res) {
 }
 
 function uploadImage(req, res) {
-  
 
   const user_id = req.user.sub;
   let image_name = req.file_name;
 
-  const heroku_backend = `https://files-user-backend.herokuapp.com/app/get-image-user/${req.user.sub}/`;
+  const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-image-user/${req.user.sub}/`;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${heroku_backend}${image_name}` }, { new: true }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
@@ -297,7 +297,7 @@ function uploadImage(req, res) {
 //#region getImageUser
 async function getImageUser(req, res) {
 
-  res.redirect(`${config.ip_fetch.temp}/app/get-image-user/${req.params.id}/${req.params.imageFile}`);  
+  res.redirect(`${config.ip_fetch.temp}/app/get-image-user/${req.params.id}/${req.params.imageFile}`);
 
 
 }
