@@ -26,7 +26,7 @@ exports.image_valid = async function (req, res, next) {
 
 exports.file_valid = async function (req, res, next) {
 
-  const resp = await findpub(req, res).then((data) => {
+  const resp = findpub(req, res).then((data) => {
     return data;
   }).catch(err => {
 
