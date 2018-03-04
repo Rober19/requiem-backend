@@ -20,7 +20,7 @@ exports.image_valid = async function (req, res, next) {
   if (data.data == config.resMsg.confirm) {
     next();
   } else {
-    res.status(200).send(data);
+    return res.status(200).send(data);
   }
 
 
