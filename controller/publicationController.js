@@ -43,12 +43,11 @@ function deletePublication(req, res) {
         if (err) return res.status(500).send(config.resJson(config.resMsg.publicationsBackErr, 500));
         if (!data) return res.status(500).send(config.resJson(config.resMsg.publicationNotFound, 500));
         return res.status(200).send(config.resJson(data, 200));
+        //aqui debo eliminar un archivo  
       });
     } else {
       return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
     }
-
-
   });
 }
 
@@ -60,7 +59,7 @@ function getPublications(req, res) {
   }
   let itemsPerPage = 4;
 
-  dbFollow.find({ user: req.user.sub }).populate('followed').exec((err, data) => {
+  dbFollow.find({ user: req.user.sub }).sort('-name').populate('followed').exec((err, data) => {
     //si ocurre algun error pues lo retornaremos
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
 
@@ -72,7 +71,7 @@ function getPublications(req, res) {
 
     dbPublication.find({ user: { '$in': follows_clean } })
       .sort('-created_at')
-      .populate('user')
+      .populate('user', '-password -__v -name -surname -email')
       .paginate(page, itemsPerPage, (err, data, total) => {
         if (err) return res.status(500).send(config.resJson(config.resMsg.publicationsBackErr, 500));
         if (!data) return res.status(500).send(config.resJson(config.resMsg.publicationNotFound, 500));
@@ -90,24 +89,18 @@ function getPublications(req, res) {
 
 function getPublication(req, res) {
   const public_id = req.params.id;
-
   dbPublication.findById({ _id: public_id }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.publicationsBackErr, 500));
     if (!data) return res.status(500).send(config.resJson(config.resMsg.publicationNotFound, 500));
     return res.status(200).send(config.resJson(data, 200));
   });
-
 }
 
 function uploadImagePub(req, res) {
-
-  
-
   const user_id = req.user.sub;
   const pub_id = req.params.id;
   let file_name = req.file_name;
   const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-image-pub/${req.user.sub}/`
-
 
   dbPublication.findOne({ _id: pub_id, user: req.user.sub }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
@@ -126,9 +119,6 @@ function uploadImagePub(req, res) {
       });
     }
   });
-
-
-
 }
 
 //#region getImageUser

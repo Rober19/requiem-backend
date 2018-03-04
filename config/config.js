@@ -54,7 +54,7 @@ const resMsg = {
   MessageSavedOk: 'Mensaje guardad con exito',
   notMessage: 'No hay mensajes disponibles',
   publicationNotFound: 'No existen o no se han encontrado publicaciones',
-  
+  public_fileExist: 'La publicación ya contiene un archivo'
 };
 
 //contraseñas para los tokens
