@@ -37,7 +37,7 @@ function User(req) {
     nick: req.body.nick,
     email: req.body.email,
     password: Passcrypt(req.body.password),
-    image: 'https://files-user-backend.herokuapp.com/app/get-image-user/1/default-user.png'
+    image: 'https://backend-mean5-project.herokuapp.com/app/get-image-user/1/default-user.png'
   }
   return user;
 }
