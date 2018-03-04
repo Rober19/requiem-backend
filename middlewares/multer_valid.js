@@ -15,7 +15,7 @@ const agent = new https.Agent({
 exports.image_valid = async function (req, res, next) {
   req.headers.user = req.user.sub;
   let value = await fetch(`${config.ip_fetch.temp}/app/upload-image-user`, { method: 'POST', body: req, headers: req.headers });
-  let data = await value.text();
+  let data = await value.json();
 
   res.status(200).send(data);
 
