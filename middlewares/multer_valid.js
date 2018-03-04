@@ -7,12 +7,15 @@ const jwt = require('jwt-simple');
 const fetch = require('node-fetch');
 //aqui requerimos multer para validar la subida de archivos
 const multer = require('multer');
-
+const https = require("https");
+const agent = new https.Agent({
+  rejectUnauthorized: false
+})
 
 exports.image_valid = async function (req, res, next) {
-  req.headers.user = req.user.sub
+  req.headers.user = req.user.sub;
   let value = await fetch(`${config.ip_fetch.temp}/app/upload-image-user`, { method: 'POST', body: req, headers: req.headers });
-  let data = await value.json();
+  let data = await value.text();
 
   res.status(200).send(data);
 

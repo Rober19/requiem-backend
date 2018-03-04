@@ -270,18 +270,12 @@ function updateUser(req, res) {
 }
 
 function uploadImage(req, res) {
-
   
 
   const user_id = req.user.sub;
   let image_name = req.file_name;
-  const img_user = image_name.split('\--');
-  const heroku_backend = `https://files-user-backend.herokuapp.com/app/get-image-user/${req.user.sub}/`
 
-  const path_file = `./uploads/users/${user_id}/${image_name}`;
-
-  fs.renameSync(path_file, `./uploads/users/${user_id}/${img_user[0]}${img_user[2]}`);
-  image_name = `${img_user[0]}${img_user[2]}`;
+  const heroku_backend = `https://files-user-backend.herokuapp.com/app/get-image-user/${req.user.sub}/`;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${heroku_backend}${image_name}` }, { new: true }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
