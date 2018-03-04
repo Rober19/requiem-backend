@@ -17,7 +17,12 @@ exports.image_valid = async function (req, res, next) {
   let value = await fetch(`${config.ip_fetch.temp}/app/upload-image-user`, { method: 'POST', body: req, headers: req.headers });
   let data = await value.json();
 
- // res.status(200).send(data);
+  if (data.data == config.resMsg.confirm) {
+    next();
+  } else {
+    res.status(200).send(data);
+  }
+
 
 }
 
