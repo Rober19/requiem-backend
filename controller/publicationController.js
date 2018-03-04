@@ -101,6 +101,8 @@ function getPublication(req, res) {
 
 function uploadImagePub(req, res) {
 
+  
+
   const user_id = req.user.sub;
   const pub_id = req.params.id;
   let file_name = req.file_name;
