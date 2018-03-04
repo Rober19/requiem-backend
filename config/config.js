@@ -61,6 +61,12 @@ const resMsg = {
 const admin_secret = 'givemethetoken';
 const secret_name_image = 'packet';
 const secret_user_token = 'secret_token_summertime_sadness';
+
+const ip_fetch = {
+  temp: 'http://localhost:3001',
+  temp1: ''
+}
+
 //funcion que responde los parametros
 function resJson(msg, status) {
   const answer = { data: msg, status: status}
@@ -79,5 +85,6 @@ module.exports = {
   resTest,
   secret_name_image,
   secret_user_token,
-  admin_secret
+  admin_secret,
+  ip_fetch
 }

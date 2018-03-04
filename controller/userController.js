@@ -18,7 +18,7 @@ const jwt = require('jwt-simple');
 const fs = require('fs');
 // trabajar con rutas del sistema de ficheros
 const path = require('path');
-//
+const fetch = require('node-fetch');
 
 // validador de la contraseña traida por el req.body
 function Passcrypt(password) {
@@ -37,7 +37,7 @@ function User(req) {
     nick: req.body.nick,
     email: req.body.email,
     password: Passcrypt(req.body.password),
-    image: 'https://backend-mean5-project.herokuapp.com/app/get-image-user/1/default-user.png'
+    image: 'https://files-user-backend.herokuapp.com/app/get-image-user/1/default-user.png'
   }
   return user;
 }
@@ -271,10 +271,12 @@ function updateUser(req, res) {
 
 function uploadImage(req, res) {
 
+  
+
   const user_id = req.user.sub;
   let image_name = req.file_name;
   const img_user = image_name.split('\--');
-  const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-image-user/${req.user.sub}/`
+  const heroku_backend = `https://files-user-backend.herokuapp.com/app/get-image-user/${req.user.sub}/`
 
   const path_file = `./uploads/users/${user_id}/${image_name}`;
 
@@ -299,26 +301,11 @@ function uploadImage(req, res) {
 }
 
 //#region getImageUser
-function getImageUser(req, res) {
-  const image_file = req.params.imageFile;
-  // si existe image_file
-  if (image_file) {
+async function getImageUser(req, res) {
 
-    const path_file = `./uploads/users/${req.params.id}/${image_file}`;
-    //si image_file es igual al nombre de la imagen por defecto
-    if (image_file == 'default-user.png') {
-      return res.status(200).sendFile(path.resolve(`./uploads/users/${image_file}`));
-    }
-    fs.exists(path_file, (data) => {
-      if (data) {
-        res.status(200).sendFile(path.resolve(path_file));
-      } else {
-        return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
-      }
-    });
-  } else {
-    return res.status(500).send(config.resJson(config.resMsg.notfound, 500));
-  }
+  res.redirect(`${config.ip_fetch.temp}/app/get-image-user/${req.params.id}/${req.params.imageFile}`);  
+
+
 }
 //#endregion 
 

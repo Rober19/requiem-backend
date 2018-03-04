@@ -29,10 +29,9 @@ app.get('/get-image-user/:id/:imageFile', userController.getImageUser);
 
 app.get('/get-counters/:id', userController.getUser_Counters)
 
-
 // este es de prueba get
 app.get('/get', (req, res) => {
-  res.status(200).send('conecté');
+  res.status(200).send({data: 'conecté'});
 });
 
 
