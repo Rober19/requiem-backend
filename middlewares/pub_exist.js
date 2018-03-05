@@ -1,9 +1,13 @@
 'use strict'
 
-
+const path = require('path');
 const config = require('../config/config');
+const moment = require('moment')
+const jwt = require('jwt-simple');
+const fetch = require('node-fetch');
+//aqui requerimos multer para validar la subida de archivos
+const multer = require('multer');
 const dbPublication = require('../model/publication');
-
 
 exports.find_pub = function (req, res, next) {
 
