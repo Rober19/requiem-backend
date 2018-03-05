@@ -9,18 +9,12 @@ const config = require('../config/config');
 const publicationController = require('../controller/publicationController');
 
 app.post('/publication', middle_auth.ensure_Auth, publicationController.createPublication);
-
-app.post('/upload-file-pub', middle_auth.ensure_Auth, middle_pub.find_pub)
-
-app.post('/upload-test', [middle_auth.ensure_Auth], (req, res) => {
-  res.status(200).send('hola');
-})
-//,middle_file.file_valid], publicationController.uploadImagePub);
-
 app.get('/publication/:id', middle_auth.ensure_Auth, publicationController.getPublication);
 app.get('/publications', middle_auth.ensure_Auth, publicationController.getPublications);
 app.delete('/publication/:id', middle_auth.ensure_Auth, publicationController.deletePublication);
 
+
+app.post('/upload-file-pub/:id', [middle_auth.ensure_Auth, middle_pub.find_pub, middle_file.file_valid], publicationController.uploadImagePub);
 
 app.get('/get-file-pub/:id/:imageFile', publicationController.getImagePub);
 

@@ -98,7 +98,7 @@ function uploadImagePub(req, res) {
   const user_id = req.user.sub;
   const pub_id = req.params.id;
   let file_name = req.file_name;
-  const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-file-pub/${req.user.sub}/`
+  const heroku_backend = `${config.ip_fetch.temp}/app/get-file-pub/${req.user.sub}/`
 
 
   dbPublication.findByIdAndUpdate({ _id: pub_id }, { file: `${heroku_backend}${file_name}` }, { new: true }, (err, data) => {
