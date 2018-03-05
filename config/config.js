@@ -64,7 +64,7 @@ const secret_user_token = 'secret_token_summertime_sadness';
 
 const ip_fetch = {
   temp: 'http://localhost:3001',
-  temp1: 'http://ec2-107-23-22-49.compute-1.amazonaws.com:3001'
+  temp: 'http://ec2-107-23-22-49.compute-1.amazonaws.com:3001'
 }
 
 //funcion que responde los parametros
