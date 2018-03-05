@@ -44,6 +44,4 @@ exports.ensure_Auth = function (req, res, next) {
     });
 
 
-
-
 }
