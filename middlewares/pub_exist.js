@@ -18,6 +18,7 @@ exports.find_pub = async function (req, res, next) {
     if (data == null || data == undefined) return res.status(400).send(config.resJson(config.resMsg.publicationNotFound, 400))
     if (data.file && data.file != null) return res.status(400).send(config.resJson(config.resMsg.public_fileExist, 400));
     next();
+    res.status(200).send(config.resJson(config.resMsg.conectionOk, 200));
   });
 
 }
