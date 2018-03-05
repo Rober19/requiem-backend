@@ -102,24 +102,19 @@ function uploadImagePub(req, res) {
   let file_name = req.file_name;
   const heroku_backend = `https://backend-mean5-project.herokuapp.com/app/get-file-pub/${req.user.sub}/`
 
-  dbPublication.findOne({ _id: pub_id, user: req.user.sub }, (err, data) => {
+
+  dbPublication.findByIdAndUpdate({ _id: pub_id }, { file: `${heroku_backend}${file_name}` }, { new: true }, (err, data) => {
+
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
-    if (data == null) {
-      return res.status(500).send(config.resJson(config.resMsg.publicationsBackErr, 500))
+
+    if (data != null) {
+      return res.status(200).send(config.resJson(data, 200));
     } else {
-      dbPublication.findByIdAndUpdate({ _id: pub_id }, { file: `${heroku_backend}${file_name}` }, { new: true }, (err, data) => {
-
-        if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
-
-        if (data != null) {
-          return res.status(200).send(config.resJson(data, 200));
-        } else {
-          return res.status(500).send(config.resJson(config.resMsg.publicationNotFound, 500));
-        }
-      });
+      return res.status(500).send(config.resJson(config.resMsg.publicationNotFound, 500));
     }
   });
 }
+
 
 //#region getImageUser
 function getImagePub(req, res) {
