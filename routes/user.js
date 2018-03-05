@@ -23,11 +23,9 @@ app.get('/users', middle_auth.ensure_Auth, userController.getUsers);
 //esta petición modifica los datos del usuario en sesion
 app.put('/update-user', middle_auth.ensure_Auth, userController.updateUser)
 //esta petición es para la subida de la imagen del usuario en sesion
-app.post('/upload-image-user', [middle_auth.ensure_Auth, middle_file.image_valid], userController.uploadImage);
+app.put('/upload-image-user', [middle_auth.ensure_Auth, middle_file.image_valid], userController.uploadImage);
 
-app.put('/upload-image-user', [middle_auth.ensure_Auth], (req, res) => {
-  res.status(200).send({data: 'conecté'});
-});
+
 
 // esta petición es para obtener la imagen del usuario por parametros
 app.get('/get-image-user/:id/:imageFile', userController.getImageUser);
