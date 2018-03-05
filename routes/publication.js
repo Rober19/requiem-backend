@@ -12,14 +12,12 @@ app.post('/publication', middle_auth.ensure_Auth, publicationController.createPu
 
 app.post('/upload-file-pub', middle_auth.ensure_Auth, middle_pub.find_pub)
 
-//app.post('/upload-test', [middle_auth.ensure_Auth], middle_pub.find_pub)
+app.post('/upload-test', [middle_auth.ensure_Auth], middle_pub.find_pub)
 //,middle_file.file_valid], publicationController.uploadImagePub);
 
 app.get('/publication/:id', middle_auth.ensure_Auth, publicationController.getPublication);
 app.get('/publications', middle_auth.ensure_Auth, publicationController.getPublications);
 app.delete('/publication/:id', middle_auth.ensure_Auth, publicationController.deletePublication);
-
-
 
 
 app.get('/get-file-pub/:id/:imageFile', publicationController.getImagePub);
