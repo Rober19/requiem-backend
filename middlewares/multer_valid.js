@@ -26,6 +26,8 @@ exports.image_valid = async function (req, res, next) {
 
 exports.file_valid = async function (req, res, next) {
 
+  return res.status(500).send(config.resJson('parada', 500));
+
   req.headers.user = req.user.sub
   let value = await fetch(`${config.ip_fetch.temp}/app/upload-file-pub/${req.params.id}`, { method: 'POST', body: req, headers: req.headers });
   let data = await value.json();
