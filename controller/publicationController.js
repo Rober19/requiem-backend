@@ -8,8 +8,6 @@ const mongoosePaginate = require('mongoose-pagination');
 
 const dbPublication = require('../model/publication');
 const dbFollow = require('../model/follow');
-const dbUser = require('../model/user');
-
 
 function modelPub(req) {
   const publication = {

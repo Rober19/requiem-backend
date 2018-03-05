@@ -25,10 +25,9 @@ app.use(bodyParser.json());
 
 app.use(morgan('dev'));
 //rutas
-
+app.use('/app', publicationRouter);
 app.use('/app', followRouter);
 app.use('/app', messageRouter);
-app.use('/app', publicationRouter);
 app.use('/app', userRouter);
 
 app.use(function (err, req, res, next) {  
