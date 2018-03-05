@@ -13,7 +13,7 @@ app.post('/publication', middle_auth.ensure_Auth, publicationController.createPu
 app.post('/upload-file-pub', middle_auth.ensure_Auth, middle_pub.find_pub)
 
 app.post('/upload-test', [middle_auth.ensure_Auth], (req, res) => {
-  return res.status(200).send(data);
+  console.log('hola')
 })
 //,middle_file.file_valid], publicationController.uploadImagePub);
 
