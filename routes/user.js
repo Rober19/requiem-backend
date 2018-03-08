@@ -29,7 +29,7 @@ app.post('/upload-image-user', [middle_auth.ensure_Auth, middle_file.image_valid
 // esta petición es para obtener la imagen del usuario por parametros
 app.get('/get-image-user/:id/:imageFile', userController.getImageUser);
 
-app.get('/get-counters/:id', userController.getUser_Counters)
+app.get('/get-counters/:id', middle_auth.ensure_Auth, userController.getUser_Counters)
 
 // este es de prueba get
 app.get('/get', (req, res) => {
