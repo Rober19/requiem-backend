@@ -10,7 +10,8 @@ const publicationController = require('../controller/publicationController');
 
 app.post('/publication', middle_auth.ensure_Auth, publicationController.createPublication);
 app.get('/publication/:id', middle_auth.ensure_Auth, publicationController.getPublication);
-app.get('/publications', middle_auth.ensure_Auth, publicationController.getPublications);
+app.get('/publications/:id', middle_auth.ensure_Auth, publicationController.getPublications);
+
 app.delete('/publication/:id', middle_auth.ensure_Auth, publicationController.deletePublication);
 
 

@@ -55,9 +55,9 @@ function getPublications(req, res) {
   if (req.query.page) {
     page = req.query.page;
   }
-  let itemsPerPage = 4;
+  let itemsPerPage = 6;
 
-  dbFollow.find({ user: req.user.sub }).sort('-name').populate('followed').exec((err, data) => {
+  dbFollow.find({ user: req.params.id }).sort('-name').populate('followed').exec((err, data) => {
     //si ocurre algun error pues lo retornaremos
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
 
