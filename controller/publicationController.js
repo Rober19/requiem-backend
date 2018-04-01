@@ -49,7 +49,7 @@ function deletePublication(req, res) {
   });
 }
 
-function getPublications(req, res) {
+function getPublications_followed(req, res) {
   let page = '1';
 
   if (req.query.page) {
@@ -57,7 +57,7 @@ function getPublications(req, res) {
   }
   let itemsPerPage = 6;
 
-  dbFollow.find({ user: req.params.id }).sort('-name').populate('followed').exec((err, data) => {
+  dbFollow.find({ user: req.user.sub }).sort('-name').populate('followed').exec((err, data) => {
     //si ocurre algun error pues lo retornaremos
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
 
@@ -83,6 +83,32 @@ function getPublications(req, res) {
       });
 
   });
+}
+
+function getPublications(req, res) {
+  let page = '1';
+
+  if (req.query.page) {
+    page = req.query.page;
+  }
+  let itemsPerPage = 6;  
+
+    dbPublication.find({ user: req.user.sub })
+      .sort('-created_at')
+      .populate('user', '-password -__v -name -surname -email')
+      .paginate(page, itemsPerPage, (err, data, total) => {
+        if (err) return res.status(500).send(config.resJson(config.resMsg.publicationsBackErr, 500));
+        if (!data) return res.status(500).send(config.resJson(config.resMsg.publicationNotFound, 500));
+
+        return res.status(200).send({
+          total_items: total,
+          pages: Math.ceil(total / itemsPerPage),
+          page: page,
+          data
+        })
+      });
+
+
 }
 
 function getPublication(req, res) {
