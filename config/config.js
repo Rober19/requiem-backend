@@ -108,8 +108,9 @@ const secret_user_token = 'secret_token_summertime_sadness';
 
 const ip_fetch = {
   temp1: 'http://localhost:3001',
-  temp: 'http://ec2-54-227-202-54.compute-1.amazonaws.com:3001',
-  temp2: 'http://files-mean5-project.herokuapp.com'
+  temp3: 'http://ec2-54-227-202-54.compute-1.amazonaws.com:3001',
+  temp2: 'http://files-mean5-project.herokuapp.com',
+  temp: 'http://files-mean5-project-files-mean5-project.7e14.starter-us-west-2.openshiftapps.com'
 }
 
 //funcion que responde los parametros
