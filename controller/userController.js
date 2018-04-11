@@ -70,6 +70,7 @@ function createUser(req, res) {
 
 }
 // Este es el metodo de login
+
 function loginUser(req, res) {
   // antes de hacer el login buscaremos si el email registrado existe
   dbUser.findOne({ email: User(req).email }, (err, data) => {
@@ -275,9 +276,9 @@ function uploadImage(req, res) {
   const user_id = req.user.sub;
   let image_name = req.file_name;
   
-  const backend = `${config.ip_fetch.temp}/app/get-image-user/${req.user.sub}/`;
+  //const backend = `${config.ip_fetch.temp}/app/get-image-user/${req.user.sub}/`;
 
-  dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${backend}${image_name}` }, { new: true }, (err, data) => {
+  dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${image_name}` }, { new: true }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
 
     if (data != null) {

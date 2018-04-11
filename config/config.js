@@ -56,7 +56,7 @@ const resMsg = {
   serverOn: 'Server Running',
   serverOff: 'Server Off',
   serverErr: 'Ha ocurrido un error en el servidor',
-  conectionErr: 'La conexion se ha establecido correctamente',
+  conectionErr: 'La conexion no se ha establecido correctamente',
   conectionOk: 'La conexion se ha establecido correctamente',
   loginOK: 'Logueado correctamente',
   loginErr: 'Ha ocurrido algo malo en el ingreso',
