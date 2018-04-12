@@ -32,11 +32,25 @@ exports.image_valid = async function (req, res, next) {
   let nameFile = req.user.sub;
   let formData_Key = 'image';
   let tokenId = shortid.generate();
+  let maxSize_file = 5 * 1024 * 1024;
+  const gs_bucket = 'gs://rober-firebase.appspot.com';
 
   const multer = Multer({
     storage: Multer.memoryStorage(),
     limits: {
-      fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+      fileSize: maxSize_file
+    },
+    fileFilter: (req, file, cb) => {
+
+      if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg' || file.mimetype == 'image/gif') {
+        //aqui se descargó correctamente
+        cb(null, true);
+      } else {
+        //pero aqui retornara cualquier error
+        req.fileValidationError = config.resMsg.extensionInvalid;
+        return cb(null, false, new Error(config.resJson(req.fileValidationError, 500)));
+      }
+
     }
   });
 
@@ -51,7 +65,7 @@ exports.image_valid = async function (req, res, next) {
       }
       //let newFileName = `Requie/${file.originalname}`;
       let newFileName = `${folderPath}/${nameFile}`;
-      const bucket = storage.bucket("gs://rober-firebase.appspot.com");
+      const bucket = storage.bucket(gs_bucket);
 
       let fileUpload = bucket.file(newFileName);
 
@@ -65,8 +79,7 @@ exports.image_valid = async function (req, res, next) {
       });
 
       blobStream.on('error', (error) => {
-
-        reject(error);
+        reject(`${config.resMsg.error} : blobStream.on`);
       });
 
       blobStream.on('finish', (data) => {
@@ -89,8 +102,8 @@ exports.image_valid = async function (req, res, next) {
   const md_image = multer.single(formData_Key);
 
    md_image(req, res, (err) => {    
-    let file = req.file;
-    if (file) {
+    let file = req.file;    
+    if (file && !err) {
       uploadImageToStorage(file).then((url) => {
         req.file_name = url;
         next();
@@ -101,8 +114,13 @@ exports.image_valid = async function (req, res, next) {
         });
       });
     } else {
+
+      if (err && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(500).send(config.resJson((config.resMsg.limit_unexpectedFiles + ` : ${1} ${config.resMsg.file}`), 500));
+
+    if (err && err.code == 'LIMIT_FILE_SIZE') return res.status(500).send(config.resJson((config.resMsg.limit_fileSize + ` : ${maxSize_file / 1048576}MB`), 500));
+
       return res.status(400).send({
-        status: config.resMsg.requiredFile+11
+        data: config.resMsg.requiredFile
       });
     }
 
