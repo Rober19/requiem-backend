@@ -36,8 +36,7 @@ function User(req) {
     surname: req.body.surname,
     nick: req.body.nick,
     email: req.body.email,
-    password: Passcrypt(req.body.password),
-    image: config.ip_fetch.ip_defaul_user_image,
+    password: Passcrypt(req.body.password),    
     role: 'USER'
   }
   return user;

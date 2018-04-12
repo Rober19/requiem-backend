@@ -28,7 +28,11 @@ const user = mongoose.Schema({
     type: String,
     required: [true, config.resMsg.fieldRequired]
   },
-  image: String
+  image: {
+    type: String,
+    required: [true, config.resMsg.fieldRequired],
+    default: config.ip_fetch.ip_defaul_user_image
+  },
 });
 
 module.exports = mongoose.model('user', user);
