@@ -24,7 +24,10 @@ const user = mongoose.Schema({
     type: String,
     required: [true, config.resMsg.fieldRequired]
   },
-  role: String,
+  role: {
+    type: String,
+    required: [true, config.resMsg.fieldRequired]
+  },
   image: String
 });
 

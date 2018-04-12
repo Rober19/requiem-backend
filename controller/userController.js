@@ -37,7 +37,8 @@ function User(req) {
     nick: req.body.nick,
     email: req.body.email,
     password: Passcrypt(req.body.password),
-    image: `${config.ip_fetch.temp}/app/get-image-user/1/default-user.png`
+    image: config.ip_fetch.ip_defaul_user_image,
+    role: 'USER'
   }
   return user;
 }
