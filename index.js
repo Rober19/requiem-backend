@@ -5,19 +5,15 @@ const config = require('./config/config');
 const app = require('./app');
 //importar la conexion a mongoose pre-configurada
 const mongoose = require('./config/db-mongoose');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+let i = 0;
 io.on('connection', socket => {
-
-  socket.on('myNotification', data => {
-
-    if (data.option == 'like') {
-      io.emit('myNotification', data)
-      console.log(data)
-    }
-
-
+    
+  socket.on('message', data => {
+    i += 1;
+    console.log(i,data);
+    io.emit('message', { message: i+'backend' });
   });
 
 });
