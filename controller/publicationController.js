@@ -93,7 +93,7 @@ function getPublications(req, res) {
   }
   let itemsPerPage = 6;  
 
-    dbPublication.find({ user: req.user.sub })
+    dbPublication.find({ user: req.params.id })
       .sort('-created_at')
       .populate('user', '-password -__v -name -surname -email')
       .paginate(page, itemsPerPage, (err, data, total) => {
