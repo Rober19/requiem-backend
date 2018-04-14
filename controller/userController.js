@@ -36,7 +36,7 @@ function User(req) {
     surname: req.body.surname,
     nick: req.body.nick,
     email: req.body.email,
-    password: Passcrypt(req.body.password),    
+    password: Passcrypt(req.body.password),
     role: 'USER'
   }
   return user;
@@ -113,10 +113,14 @@ function getUser(req, res) {
       } else {
         data.password = undefined;
 
-        follow_data(req.user.sub, id_user).then(value => {
-          return res.status(200).send(config.resJson({ data, value }, 200));
-        });
+        follow_data(req.user.sub, id_user).then(follow_data => {
+          
+          return res.status(200).send(config.resJson({ data, follow_data }, 200));
 
+        },
+        err => {
+          return res.status(400).send(config.resJson(err, 400));
+        })
 
       }
     } else {
@@ -160,23 +164,24 @@ async function follow_data(user, followed) {
   let following = await dbFollow.findOne({
     user: user,
     followed: followed
-  }, (err, follow) => {
+  }, (err, follow) => {   
     if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
     return follow;
-  });
+  }).select({ '_id': 0, '__v': 0, 'user': 0 });;
 
   let followBack = await dbFollow.findOne({
     user: followed,
     followed: user
-  }, (err, follow) => {
+  }, (err, follow) => {    
     if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
     return follow;
-  });
-
-  return {
-    following: following.followed,
-    followed: followBack.user
-  }
+  }).select({ '_id': 0, '__v': 0, 'user': 0 });;
+      
+    return {
+      following: following,
+      followed: followBack
+    } 
+  
 
 }
 
@@ -272,10 +277,10 @@ function updateUser(req, res) {
 }
 
 function uploadImage(req, res) {
-  
+
   const user_id = req.user.sub;
   let image_name = req.file_name;
-  
+
   //const backend = `${config.ip_fetch.temp}/app/get-image-user/${req.user.sub}/`;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${image_name}` }, { new: true }, (err, data) => {

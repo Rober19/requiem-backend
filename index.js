@@ -8,20 +8,27 @@ const mongoose = require('./config/db-mongoose');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 let i = 0;
+let x = 0;
 io.on('connection', socket => {
-    
+
   socket.on('message', data => {
     i += 1;
-    console.log(i,data);
-    io.emit('message', { message: i+'backend' });
+    console.log(i, data);
+    io.emit('message', { message: i + 'backend' });
   });
 
-});
+  socket.on('imageChange', data => {
+      x += 1;
+      console.log(x, data);
+      io.emit('message', data);
+    })
 
-//abri un server
-server.listen(config.port, () => {
-  console.log(config.resJson((config.resMsg.serverOn + ' on ' + config.port), 200))
-});
+  });
+
+  //abri un server
+  server.listen(config.port, () => {
+    console.log(config.resJson((config.resMsg.serverOn + ' on ' + config.port), 200))
+  });
 
 
 
