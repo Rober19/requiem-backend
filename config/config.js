@@ -4,6 +4,8 @@ const myConfig = require('rober19-config')
 
 const port = process.env.PORT || 3000;
 
+let x = 0;
+
 const resMsg = myConfig.resMsg;
 
 //contraseñas para los tokens
