@@ -231,7 +231,7 @@ function getUsers(req, res) {
     return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
   }
 
-  let itemsPerPage = 5;
+  let itemsPerPage = 6;
 
   dbUser.find({}).select(['-password']).sort('_id').paginate(Page, itemsPerPage, (err, users, total) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
