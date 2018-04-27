@@ -67,7 +67,7 @@ function createUser(req, res) {
         if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
         //sino retornaremos un mensaje exitoso
         req.headers.user = data.id;
-        fetch(`${config.ip_fetch.temp}/app/create-dir`, { method: 'POST', headers: req.headers });
+       //fetch(`${config.ip_fetch.temp}/app/create-dir`, { method: 'POST', headers: req.headers });
 
         res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
       });

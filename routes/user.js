@@ -11,6 +11,8 @@ const middle_auth = require('../middlewares/authenticated');
 const middle_pub = require('../middlewares/pub_exist');
 const middle_file = require('../middlewares/multer_valid');
 
+const dbUser = require('../model/user')
+const fetch = require('node-fetch');
 
 // esta peticion es el post que recibe la funcion de Registro del controlador
 app.post('/register', userController.createUser);
@@ -34,6 +36,22 @@ app.get('/get-counters/:id', middle_auth.ensure_Auth, userController.getUser_Cou
 // este es de prueba get
 app.get('/get', (req, res) => {
   res.status(200).send({ data: 'conecté' });
+});
+
+app.get('/generateuser', (req, res) => {
+
+
+    fetch('http://192.168.1.67:3000/generateuser')
+      .then(res1 => res1.json())
+      .then(
+        json => {
+          console.log(json.nick)
+          res.status(200).send(json);
+        }
+      );
+ 
+
+  
 });
 
 
