@@ -15,6 +15,7 @@ const dbUser = require('../model/user');
 
 //este es el esquema que usaremos del modelo follows
 function Follow(req) {
+
   const dbFollow = {
     user: req.user.sub,
     followed: req.body.followed
@@ -45,7 +46,29 @@ function createFollow(req, res) {
       res.status(200).send(config.resJson(config.resMsg.userFollowedExist, 200));
     }
   });
+
 }
+
+// función para saber si un usuario es seguidor del usuario en sesión
+function isFollow(req, res) {
+
+  dbFollow.findOne({
+    //usamos la estructura del OR de mongoose - si encuntra que coincida justo con la sentencia pues -->
+    $and: [{ user: Follow(req).user }, { followed: req.params.id }]
+  }, (err, data) => {
+
+    if (err) return res.status(500).send(config.resJson(config.resMsg.userUnfollowedErr, 500));
+
+    if (data == null) {
+      if (!req.body.followed) return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
+      res.status(200).send(config.resJson(config.resMsg.userNotFollowed, 200));
+    } else {
+        res.status(200).send(data);
+    }
+  });
+
+}
+
 // esta el la funcion que elimina el follow en da DB
 function deleteFollow(req, res) {
 
@@ -166,5 +189,6 @@ module.exports = {
   createFollow,
   deleteFollow,
   getFollowingUsers,
-  getFollowersUsers
+  getFollowersUsers,
+  isFollow
 }
