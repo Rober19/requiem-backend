@@ -106,7 +106,7 @@ function getFollowingUsers(req, res) {
     Page = req.query.page;
   }
   //se mostraran 4 items por pagina
-  let itemsPerPage = 4;
+  let itemsPerPage = 10;
   // buscaremos el usuario y mostraremos sus seguidores
   dbFollow.find({ user: user_id }).populate({ path: 'followed' }).paginate(Page, itemsPerPage, (err, users, total) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));

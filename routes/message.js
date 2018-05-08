@@ -11,6 +11,6 @@ app.get('/messages',middlw_auth.ensure_Auth, messageController.getEmittMessage);
 app.get('/unviewed-messages',middlw_auth.ensure_Auth, messageController.getUnviewedMessage);
 app.get('/set-viewed-messages',middlw_auth.ensure_Auth, messageController.setViewedMessages);
 
-
+app.post('/messages',middlw_auth.ensure_Auth, messageController.getMessages);
 
 module.exports = app;

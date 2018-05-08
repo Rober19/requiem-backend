@@ -32,6 +32,48 @@ function createMessage(req, res) {
   });
 }
 
+function getMessages(req, res) {
+
+  // aqui estara el params.id 
+  const user_id = req.user.sub;
+  // la pagina inicial y por defecto será la 1
+  let Page = 1;
+  // si existe una pagina enviada por query pues se cambiará el valor de Page
+  if (req.query.page) {
+    Page = req.query.page;
+  }
+  //se mostraran 4 items por pagina
+  let itemsPerPage = 100;
+  // buscaremos el usuario y mostraremos sus seguidores
+
+  const query = {
+    $or: [
+      { receiver: req.body.receiver },
+      { emitter: req.body.emmiter },
+      { receiver: req.body.emmiter },
+      { emitter: req.body.receiver }]
+  }
+
+  dbMessage.find(query)
+    .populate('receiver emitter', '-password -__v -name -surname -email')
+    .paginate(Page, itemsPerPage, (err, message, total) => {
+      if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+
+      if (!message) return res.status(404).send(config.resJson(config.resMsg.notMessage, 404));
+
+      return res.status(200).send({
+        //los datos encontrados
+        message,
+        //la cantidad de datos hallados
+        total,
+        //dividimos el total de datos entre los items por pagina) --aproximamos
+        pages: Math.ceil(total / itemsPerPage)
+      })
+    });
+
+
+}
+
 function getReceivedMessage(req, res) {
   // aqui estara el params.id 
   const user_id = req.user.sub;
@@ -122,5 +164,6 @@ module.exports = {
   createMessage,
   getEmittMessage,
   getUnviewedMessage,
-  setViewedMessages
+  setViewedMessages,
+  getMessages
 }

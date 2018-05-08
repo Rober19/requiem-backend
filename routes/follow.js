@@ -7,7 +7,7 @@ const followController = require('../controller/followController');
 
 app.post('/follow', middlw_auth.ensure_Auth, followController.createFollow);
 app.get('/follow/:id', middlw_auth.ensure_Auth, followController.isFollow);
-app.delete('/unfollow', middlw_auth.ensure_Auth, followController.deleteFollow);
+app.post('/unfollow', middlw_auth.ensure_Auth, followController.deleteFollow);
 app.get('/following/:id', middlw_auth.ensure_Auth, followController.getFollowingUsers);
 app.get('/followers/:id', middlw_auth.ensure_Auth, followController.getFollowersUsers);
 
