@@ -48,10 +48,9 @@ function getMessages(req, res) {
 
   const query = {
     $or: [
-      { emitter: req.body.emitter },
-      { receiver: req.body.receiver },
-      { emitter: req.body.receiver },
-      { receiver: req.body.emitter },
+      { emitter: req.body.emitter, receiver: req.body.receiver },
+      { receiver: req.body.emitter, emitter: req.body.receiver },
+      
     ]
   }
 
