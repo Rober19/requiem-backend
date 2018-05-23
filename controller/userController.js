@@ -19,12 +19,14 @@ const fs = require('fs');
 // trabajar con rutas del sistema de ficheros
 const path = require('path');
 const fetch = require('node-fetch');
-const redis = require("redis")
-const client = redis.createClient({
-  port:12864,
-  auth_pass: 't0AhWeg0H3p2TacMjTmiBT8lII3zvMAb',
-  host:'redis-12864.c9.us-east-1-4.ec2.cloud.redislabs.com'
-});
+
+// const redis = require("redis")
+
+// const client = redis.createClient({
+//   port:12864,
+//   auth_pass: 't0AhWeg0H3p2TacMjTmiBT8lII3zvMAb',
+//   host:'redis-12864.c9.us-east-1-4.ec2.cloud.redislabs.com'
+// });
 
 // validador de la contraseña traida por el req.body
 function Passcrypt(password) {
@@ -90,7 +92,7 @@ function loginUser(req, res) {
         //en caso de que sea correcta se haran los procesoces de logueo y de cifrado tokens
         if (req.body.tokenget) {
           const toker_reds = jwt_user.createToken(data);
-          client.set(data.nick, toker_reds)
+          //client.set(data.nick, toker_reds)
           return res.status(200).send(config.resJson(toker_reds, 200));
         } else {
           data.password = undefined;

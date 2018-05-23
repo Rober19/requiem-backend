@@ -21,6 +21,11 @@ io.on('connection', socket => {
       x += 1;
       console.log(x, data);
       io.emit('message', data);
+    });
+
+    socket.on('chaton', data => {      
+      console.log('llegó');
+      io.emit('chaton', data);
     })
 
   });
