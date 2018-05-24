@@ -24,12 +24,24 @@ function message(req) {
 }
 
 function createMessage(req, res) {
-  dbMessage.create(message(req), (err, data) => {
-    //si ocurre algun error pues lo retornaremos
+
+  dbUser.findOne({ _id: message(req).receiver }, (err, user) => {
     if (err) return res.status(400).send(config.resJson(config.resMsg.error, 400));
-    //sino retornaremos un mensaje exitoso
-    res.status(200).send(config.resJson(config.resMsg.confirm, 200));
-  });
+
+    if (user != null && user != undefined) {
+      dbMessage.create(message(req), (err, data) => {
+        //si ocurre algun error pues lo retornaremos
+        if (err) return res.status(400).send(config.resJson(config.resMsg.error, 400));
+        //sino retornaremos un mensaje exitoso
+        res.status(200).send(config.resJson(config.resMsg.confirm, 200));
+      });
+    } else {
+      return res.status(200).send(config.resJson(config.resMsg.userNotFound, 200));
+    }
+
+  })
+
+
 }
 
 function getMessages(req, res) {
@@ -50,11 +62,12 @@ function getMessages(req, res) {
     $or: [
       { emitter: req.body.emitter, receiver: req.body.receiver },
       { receiver: req.body.emitter, emitter: req.body.receiver },
-      
+
     ]
   }
 
   dbMessage.find(query)
+    .sort('created_at')
     .populate('receiver emitter', '-password -__v -name -surname -email')
     .paginate(Page, itemsPerPage, (err, message, total) => {
       if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
