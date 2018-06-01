@@ -38,21 +38,19 @@ app.get('/get', (req, res) => {
   res.status(200).send({ data: 'conecté' });
 });
 
-app.get('/generateuser', (req, res) => {
+// app.get('/generateuser', (req, res) => {
 
 
-    fetch('http://192.168.1.67:3000/generateuser')
-      .then(res1 => res1.json())
-      .then(
-        json => {
-          console.log(json.nick)
-          res.status(200).send(json);
-        }
-      );
- 
-
+//     fetch('http://192.168.1.67:3000/generateuser')
+//       .then(res1 => res1.json())
+//       .then(
+//         json => {
+//           console.log(json.nick)
+//           res.status(200).send(json);
+//         }
+//       );
   
-});
+// });
 
 
 
