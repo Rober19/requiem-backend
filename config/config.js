@@ -14,10 +14,6 @@ const secret_name_image = 'packet';
 const secret_user_token = 'secret_token_summertime_sadness';
 
 const ip_fetch = {
-  temp1: 'http://localhost:3001',
-  temp3: 'http://ec2-54-227-202-54.compute-1.amazonaws.com:3001',
-  temp2: 'http://files-mean5-project.herokuapp.com',
-  temp: 'http://files-mean5-project-files-mean5-project.7e14.starter-us-west-2.openshiftapps.com',
   ip_defaul_user_image: 'https://firebasestorage.googleapis.com/v0/b/rober-firebase.appspot.com/o/Requiem-project%2FProfile-image%2Fdefault-user.png?alt=media&token=ba901b72-bbc0-44de-a897-cda79e6552a5'
 }
 
