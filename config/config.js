@@ -2,6 +2,10 @@
 //puerto predeterminado
 const myConfig = require('rober19-config')
 
+const dev_crendentials = require('../../credentials/credentials_rober19')
+
+const google_cloud_credentials = require('../../credentials/rober19-firebase-credentials.json')
+
 const port = process.env.PORT || 3000;
 
 let x = 0;
@@ -36,5 +40,7 @@ module.exports = {
   secret_name_image,
   secret_user_token,
   admin_secret,
-  ip_fetch
+  ip_fetch,
+  dev_crendentials,
+  google_cloud_credentials
 }

@@ -44,7 +44,9 @@ exports.image_valid = async function (req, res, next) {
   });
 
   const storage = googleStorage({
-    keyFilename: "middlewares/rober-credentials.json"
+    //keyFilename: "middlewares/rober-credentials.json",
+    projectId: 'rober-firebase',
+    credentials: config.google_cloud_credentials
   });
 
   const uploadImageToStorage = await function (file) {
