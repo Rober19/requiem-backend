@@ -8,8 +8,6 @@ const google_cloud_credentials = require('../credentials/rober19-firebase-creden
 
 const port = process.env.PORT || 3000;
 
-let x = 0;
-
 const resMsg = myConfig.resMsg;
 
 //contraseñas para los tokens
