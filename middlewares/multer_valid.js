@@ -1,19 +1,13 @@
 'use strict'
 
-const path = require('path');
 const config = require('../config/config');
-const moment = require('moment')
-const jwt = require('jwt-simple');
-const express = require('express');
-const app = express();
-const firebase = require('firebase');
+
 const googleStorage = require('@google-cloud/storage');
 
 const shortid = require('shortid');
 const fetch = require('node-fetch');
 //aqui requerimos multer para validar la subida de archivos
 const Multer = require('multer');
-const dbPublication = require('../model/publication');
 
 exports.image_valid = async function (req, res, next) {
 
