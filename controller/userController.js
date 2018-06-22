@@ -55,7 +55,9 @@ function User(req) {
     nick,
     email,
     password: Passcrypt(password),
-    role: 'USER'
+    role: 'USER',
+    logged_in: false,
+    times_logged: 0
   }
 
 }
@@ -92,7 +94,7 @@ function createUser(req, res) {
 
 function loginUser(req, res) {
   // antes de hacer el login buscaremos si el email registrado existe
-
+  let userData = User(req);
   dbUser.findOne({ email: userData.email }, (err, data) => {
     if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
     if (data != null) {
@@ -101,15 +103,20 @@ function loginUser(req, res) {
       //con esta const podremos ver si la contraseña es correcta o no
       const validateLog = bcrypt.compareSync(req.body.password, data.password);
       if (validateLog) {
-        //en caso de que sea correcta se haran los procesoces de logueo y de cifrado tokens
+        //en caso de que sea correcta se haran los procesoces de logueo y de cifrado tokens        
+
+
         if (req.body.tokenget) {
           const toker_reds = jwt_user.createToken(data);
           //client.set(data.nick, toker_reds)
           return res.status(200).send(config.resJson(toker_reds, 200));
         } else {
+          dbUser.findByIdAndUpdate({ _id: data._id }, { times_logged: (data.times_logged + 1) }, { new: true }, (err, data) => {});
           data.password = undefined;
           return res.status(200).send(config.resJson(data, 200));
         }
+
+
 
 
       } else {
