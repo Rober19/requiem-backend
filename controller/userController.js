@@ -13,12 +13,7 @@ const bcrypt = require('bcrypt-nodejs');
 // la depnd de encriptamiento para datos del usuario(en tokens)
 const jwt_user = require('../services/jwt');
 // la depnd de creacion de tokens
-const jwt = require('jwt-simple');
-// libreria para trabajar con archivos FILE SYSTEM
-const fs = require('fs');
-// trabajar con rutas del sistema de ficheros
-const path = require('path');
-const fetch = require('node-fetch');
+
 
 // const redis = require("redis")
 

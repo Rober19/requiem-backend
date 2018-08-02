@@ -1,11 +1,8 @@
 'use strict'
 
-const path = require('path');
-const fs = require('fs');
 const config = require('../config/config');
 const moment = require('moment');
 const mongoosePaginate = require('mongoose-pagination');
-const fetch = require('node-fetch');
 const dbPublication = require('../model/publication');
 const dbFollow = require('../model/follow');
 
