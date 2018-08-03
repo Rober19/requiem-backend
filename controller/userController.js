@@ -12,11 +12,9 @@ const dbPublication = require('../model/publication');
 const bcrypt = require('bcrypt-nodejs');
 // la depnd de encriptamiento para datos del usuario(en tokens)
 const jwt_user = require('../services/jwt');
-// la depnd de creacion de tokens
 
 
 // const redis = require("redis")
-
 // const client = redis.createClient({
 //   port:12864,
 //   auth_pass: 't0AhWeg0H3p2TacMjTmiBT8lII3zvMAb',
@@ -111,9 +109,6 @@ function loginUser(req, res) {
           return res.status(200).send(config.resJson(data, 200));
         }
 
-
-
-
       } else {
         //pero en caso de que no simplemente retornaremos que la contraseña es incorrecta
         return res.status(404).send(config.resJson(config.resMsg.PasswordErr, 404));
@@ -138,9 +133,7 @@ function getUser(req, res) {
         data.password = undefined;
 
         follow_data(req.user.sub, id_user).then(follow_data => {
-
           return res.status(200).send(config.resJson({ data, follow_data }, 200));
-
         },
           err => {
             return res.status(400).send(config.resJson(err, 400));
