@@ -5,8 +5,9 @@ const config = require('./config/config');
 const app = require('./app');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const fetch = require('node-fetch')
 
-const { green, yellow, cyan} = require('chalk');
+const { green, yellow, cyan } = require('chalk');
 
 io.on('connection', socket => {
   let i = 0;
@@ -29,6 +30,18 @@ io.on('connection', socket => {
   })
 
 });
+
+setInterval(() => {
+  fetch('https://backend-mean5-project.herokuapp.com/app/get')
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (myJson) {
+      console.log(myJson);
+    });
+
+}, 300000)
+ 
 
 //abri un server
 server.listen(config.port, () => {
