@@ -1,7 +1,9 @@
 'use strict'
 
 const config = require('../config/config');
+
 const googleStorage = require('@google-cloud/storage');
+
 const shortid = require('shortid');
 const fetch = require('node-fetch');
 //aqui requerimos multer para validar la subida de archivos

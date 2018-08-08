@@ -40,6 +40,11 @@ setInterval(() => {
       console.log(myJson);
     });
 
+    fetch('https://frontend-mean5-project.herokuapp.com') 
+    .then(function (myJson) {
+      console.log(myJson);
+    });
+
 }, 300000)
  
 
