@@ -24,8 +24,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(morgan('dev'));
-//rutas
 
+//rutas
 app.use('/app', followRouter);
 app.use('/app', messageRouter);
 app.use('/app', userRouter);
