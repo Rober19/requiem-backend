@@ -43,23 +43,22 @@ io.on('connection', socket => {
 
 });
 
-setInterval(() => {
+// setInterval(() => {
 
-  fetch('https://backend-mean5-project.herokuapp.com/app/get')
-    .then((response) => {
-      return response.json();
-    })
-    .then((myJson) => {
-      console.log(myJson);
-    });
+//   fetch('https://backend-mean5-project.herokuapp.com/app/get')
+//     .then((response) => {
+//       return response.json();
+//     })
+//     .then((myJson) => {
+//       console.log(myJson);
+//     });
 
-  fetch('https://frontend-mean5-project.herokuapp.com')
-    .then(() => {
-      console.log('entró');
-    })
+//   fetch('https://frontend-mean5-project.herokuapp.com')
+//     .then(() => {
+//       console.log('entró');
+//     })
 
-
-}, 300000)
+// }, 300000)
 
 
 //abri un server
