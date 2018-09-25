@@ -5,40 +5,31 @@ const config = require('./config/config');
 const app = require('./app');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const fetch = require('node-fetch')
 
 const dbUser = require('./model/user');
 
 const { green, yellow, cyan } = require('chalk');
 
-io.on('connection', socket => {
-  let i = 0;
-  let x = 0;
-  socket.on('message', data => {
-    i += 1;
-    console.log(i, data);
-    io.emit('message', { message: i + 'backend' });
+io.on('connection', (socket) => {
+  socket.on('message', (data) => {
+    io.emit('message', { message: 'backend' });
   });
 
-  socket.on('imageChange', data => {
-    x += 1;
-    console.log(x, data);
-    io.emit('message', data);
+  socket.on('imageChange', (data) => {
+    io.emit('message', (data));
   });
 
-  socket.on('chaton', data => {
-    console.log('llegó');
-
-    dbUser.findOne({ _id: data.emitter }, (err, user) => {   
+  socket.on('chaton', (data) => {
+    dbUser.findOne({ _id: data.emitter }, (err, user) => {
       const { _id, image, nick } = user;
-      data.eData= {
+      data.eData = {
         id: _id,
         image: image,
         nick: nick
       }
       io.emit('chaton', data);
     })
-    
+
   })
 
 });
@@ -60,6 +51,8 @@ io.on('connection', socket => {
 
 // }, 300000)
 
+const bcrypt = require('bcrypt-nodejs');
+//hash: $2a$10$v0/r9NWk9D/I0ZdVQsI91.Fi/n0d3R6CLUBjS/xRo9JKh/n9yl2KG
 
 //abri un server
 server.listen(config.port, () => {
