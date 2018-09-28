@@ -8,8 +8,10 @@ const userRouter = require('./routes/user');
 const publicationRouter = require('./routes/publication');
 const followRouter = require('./routes/follow');
 const messageRouter = require('./routes/message');
+const cors = require('cors')
 
 //cors
+app.use(cors())
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, user, admin_secret");

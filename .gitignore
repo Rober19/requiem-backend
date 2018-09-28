@@ -5,4 +5,3 @@ package-lock.json
 /functions/data
 /functions/node_modules
 .vscode
-.gitmodules
