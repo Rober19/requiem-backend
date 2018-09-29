@@ -4,4 +4,5 @@ package-lock.json
 
 /functions/data
 /functions/node_modules
+/credentials-rober19/credentials
 .vscode
