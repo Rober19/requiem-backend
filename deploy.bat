@@ -35,3 +35,4 @@ xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\app.js" "D:\Software
 REM tambien en la fecha se puede usar el %date%
 git commit -m "[%gituser%] [%datestr%] %commit% "
 git push origin master
+pause
