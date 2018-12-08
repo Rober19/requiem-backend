@@ -1,4 +1,5 @@
 @echo off
+git status
 MD tempF1
 CD tempF1
 for /F "usebackq tokens=1" %%A IN (`git config user.name`) do (
