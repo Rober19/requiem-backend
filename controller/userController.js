@@ -20,6 +20,8 @@ const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
 
+
+
 // const redis = require("redis")
 
 // const client = redis.createClient({
@@ -73,6 +75,7 @@ function createUser(req, res) {
     //aqui retoranremos errores
     if (err) return res.status(500).send(config.resJson(config.resMsg.RegisterErr, 500));
     //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprobada
+
     if (data != null) {
       return res.status(400).send(config.resJson(config.resMsg.userExist, 400));
     } else {
@@ -83,7 +86,7 @@ function createUser(req, res) {
         //sino retornaremos un mensaje exitoso
         req.headers.user = data.id;
         //fetch(`${config.ip_fetch.temp}/app/create-dir`, { method: 'POST', headers: req.headers });
-
+        config.logger('', req.body, config.resJson(config.resMsg.userCreateOK, 200), null, null)
         res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
       });
     }
@@ -111,7 +114,7 @@ function loginUser(req, res) {
           //client.set(data.nick, toker_reds)
           return res.status(200).send(config.resJson(toker_reds, 200));
         } else {
-          dbUser.findByIdAndUpdate({ _id: data._id }, { times_logged: (data.times_logged + 1) }, { new: true }, (err, data) => {});
+          dbUser.findByIdAndUpdate({ _id: data._id }, { times_logged: (data.times_logged + 1) }, { new: true }, (err, data) => { });
           data.password = undefined;
           return res.status(200).send(config.resJson(data, 200));
         }

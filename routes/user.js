@@ -1,18 +1,14 @@
 'use strict'
 
 const config = require('../config/config');
-
 //requerimos express con su metodo router
 const app = require('express').Router();
 //instanciamos el controlador de usuarios para usar sus metodos
 const userController = require('../controller/userController');
 //requerimos el middleware de autenticacion de permisos
 const middle_auth = require('../middlewares/authenticated');
-const middle_pub = require('../middlewares/pub_exist');
 const middle_file = require('../middlewares/multer_valid');
 
-const dbUser = require('../model/user')
-const fetch = require('node-fetch');
 
 // esta peticion es el post que recibe la funcion de Registro del controlador
 app.post('/register', userController.createUser);

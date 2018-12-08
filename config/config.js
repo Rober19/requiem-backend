@@ -4,6 +4,10 @@ const myConfig = require('rober19-config')
 
 const dev_crendentials = require('../credentials-rober19/credentials_rober19')
 
+const logger = require('@jmbl1685/logger')({
+  host: `mongodb://root:12345@ds046367.mlab.com:46367/db-social-mean5`
+});
+
 const google_cloud_credentials = dev_crendentials.rober19_firebase;
 
 const port = process.env.PORT || 3000;
@@ -40,5 +44,6 @@ module.exports = {
   admin_secret,
   ip_fetch,
   dev_crendentials,
-  google_cloud_credentials
+  google_cloud_credentials,
+  logger
 }
