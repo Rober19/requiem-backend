@@ -20,7 +20,7 @@ for /f "tokens=1-3 delims=/ " %%j in ("%date%") do (
 )
 set p1=%git config user.name%
 echo %p1%
-set datestr= %month%_%day%_%year%
+set datestr=%month%_%day%_%year%
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\config" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github\config" /e /s /k /q /c /i /y /h
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\controller" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github\controller" /e /s /k /q /c /i /y /h
 REM xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\functions" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github\functions" /e /s /k /q /c /i /y /h
