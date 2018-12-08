@@ -29,10 +29,9 @@ xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\model" "D:\Software\
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\routes" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github\routes" /e /s /k /q /c /i /y /h
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\services" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github\services" /e /s /k /q /c /i /y /h
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\model" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github\model" /e /s /k /q /c /i /y /h
-REM xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\package.json" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /e /s /k /q /c /i /y /h
-REM xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\index.js" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /e /s /k /q /c /i /y /h
-REM xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\app.js" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /e /s /k /q /c /i /y /h
-REM xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\.gitignore" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /e /s /k /q /c /i /y /h
+xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\package.json" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /y
+xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\index.js" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /y
+xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\app.js" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /y
 
 git commit -m "[%gituser%] [%datestr%] %commit% "
 git push origin master
