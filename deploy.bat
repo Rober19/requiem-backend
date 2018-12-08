@@ -31,7 +31,6 @@ xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\model" "D:\Software\
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\package.json" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /y
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\index.js" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /y
 xcopy "D:\Software\ProyectosWEB\SOA\Requiem-\backend-heroku\app.js" "D:\Software\ProyectosWEB\SOA\Requiem-\backend-github" /y
-pause>nul
 REM tambien en la fecha se puede usar el %date%
 git commit -m "[%gituser%] [%datestr%] %commit% "
 git push origin master
