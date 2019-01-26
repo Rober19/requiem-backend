@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const dev_crendentials = JSON.parse(process.env.API_KEYS);
-
+console.log(dev_crendentials)
 
 const logger = require('@jmbl1685/logger')({
   host: `mongodb://${dev_crendentials.creds.mlab_db}/db-social-mean5`
