@@ -10,27 +10,27 @@ const dbUser = require('./model/user');
 
 const { green, yellow, cyan } = require('chalk');
 
-// io.on('connection', socket => {
-//   socket.on('message', data => {
-//     io.emit('message', { message: 'backend' });
-//   });
+io.on('connection', socket => {
+  socket.on('message', data => {
+    io.emit('message', { message: 'backend' });
+  });
 
-//   socket.on('imageChange', data => {
-//     io.emit('message', data);
-//   });
+  socket.on('imageChange', data => {
+    io.emit('message', data);
+  });
 
-//   socket.on('chaton', data => {
-//     dbUser.findOne({ _id: data.emitter }, (err, user) => {
-//       const { _id, image, nick } = user;
-//       data.eData = {
-//         id: _id,
-//         image: image,
-//         nick: nick,
-//       };
-//       io.emit('chaton', data);
-//     });
-//   });
-// });
+  socket.on('chaton', data => {
+    dbUser.findOne({ _id: data.emitter }, (err, user) => {
+      const { _id, image, nick } = user;
+      data.eData = {
+        id: _id,
+        image: image,
+        nick: nick,
+      };
+      io.emit('chaton', data);
+    });
+  });
+});
 
 
 //abri un server
