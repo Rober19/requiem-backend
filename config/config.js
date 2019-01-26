@@ -6,9 +6,9 @@ dotenv.config();
 
 const dev_crendentials = JSON.parse(process.env.API_KEYS);
 
-const logger = require('@jmbl1685/logger')({
-  host: `mongodb://${dev_crendentials.creds.mlab_db}/db-social-mean5`,
-});
+// const logger = require('@jmbl1685/logger')({
+//   host: `mongodb://${dev_crendentials.creds.mlab_db}/db-social-mean5`,
+// });
 
 const google_cloud_credentials = dev_crendentials.rober19_firebase;
 
