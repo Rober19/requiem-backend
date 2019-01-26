@@ -46,6 +46,6 @@ module.exports = {
   admin_secret,
   ip_fetch,
   dev_crendentials,
-  google_cloud_credentials,
-  logger,
+  google_cloud_credentials
+  //logger,
 };

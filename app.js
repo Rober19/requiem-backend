@@ -32,9 +32,9 @@ app.use(morgan('dev'));
 // app.use('/app', userRouter);
 // app.use('/app', publicationRouter);
 
-app.get('/', (req, res ) => {
-  res.send({msg: 'Ya!'})
-})
+app.get('/', (req, res) => {
+  res.send({ msg: 'Ya!' });
+});
 
 app.use((err, req, res, next) => {
   res.status(500).send(`${err}`);

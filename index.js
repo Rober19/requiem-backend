@@ -10,44 +10,28 @@ const dbUser = require('./model/user');
 
 const { green, yellow, cyan } = require('chalk');
 
-io.on('connection', socket => {
-  socket.on('message', data => {
-    io.emit('message', { message: 'backend' });
-  });
+// io.on('connection', socket => {
+//   socket.on('message', data => {
+//     io.emit('message', { message: 'backend' });
+//   });
 
-  socket.on('imageChange', data => {
-    io.emit('message', data);
-  });
+//   socket.on('imageChange', data => {
+//     io.emit('message', data);
+//   });
 
-  socket.on('chaton', data => {
-    dbUser.findOne({ _id: data.emitter }, (err, user) => {
-      const { _id, image, nick } = user;
-      data.eData = {
-        id: _id,
-        image: image,
-        nick: nick,
-      };
-      io.emit('chaton', data);
-    });
-  });
-});
-
-// setInterval(() => {
-
-//   fetch('https://backend-mean5-project.herokuapp.com/app/get')
-//     .then((response) => {
-//       return response.json();
-//     })
-//     .then((myJson) => {
-//       console.log(myJson);
+//   socket.on('chaton', data => {
+//     dbUser.findOne({ _id: data.emitter }, (err, user) => {
+//       const { _id, image, nick } = user;
+//       data.eData = {
+//         id: _id,
+//         image: image,
+//         nick: nick,
+//       };
+//       io.emit('chaton', data);
 //     });
+//   });
+// });
 
-//   fetch('https://frontend-mean5-project.herokuapp.com')
-//     .then(() => {
-//       console.log('entró');
-//     })
-
-// }, 300000)
 
 //abri un server
 server.listen(port, () => {

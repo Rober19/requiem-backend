@@ -8,7 +8,7 @@ const { green, cyan, red, yellow } = require('chalk');
 //hacer un metodo de promesa para hacer conexión
 mongoose.Promise = global.Promise;
 // conectar con la url de la data base
-mongoose.connect(`mongodb://${dev_crendentials.creds.mlab_db}/db-social-mean5`).then((d) => {
+mongoose.connect(`mongodb://${dev_crendentials.creds.mlab_db}/db-social-mean5`,{ useNewUrlParser: true }).then((d) => {
   //si se conecta correctamente 
 const { name, /*host, port, user, pass*/ } = d.connections[0];
   //console.log(`Conectado a ${name} [${host}:${port}]`)
