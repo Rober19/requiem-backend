@@ -1,28 +1,23 @@
-'use strict'
+'use strict';
 
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const cors = require('cors')
-const [
-  userRouter,
-  publicationRouter,
-  followRouter,
-  messageRouter
-] = [
+const cors = require('cors');
+const [userRouter, publicationRouter, followRouter, messageRouter] = [
   require('./routes/user'),
   require('./routes/publication'),
   require('./routes/follow'),
-  require('./routes/message')
-]
+  require('./routes/message'),
+];
 
 //cors
-app.use(cors())
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, user, admin_secret");
-  next();
-});
+app.use(cors());
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, user, admin_secret");
+//   next();
+// });
 
 //middlewares -: es un metodo que se ejecuta antes que llegue a un controlador
 //usar body-parser
@@ -37,9 +32,9 @@ app.use('/app', messageRouter);
 app.use('/app', userRouter);
 app.use('/app', publicationRouter);
 
-app.use(function (err, req, res, next) {
-  res.status(500).send(`${err}`)
-  next()
-})
+app.use((err, req, res, next) => {
+  res.status(500).send(`${err}`);
+  next();
+});
 
 module.exports = app;

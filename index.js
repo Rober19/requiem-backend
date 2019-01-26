@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 //importar mis configuraciones predeterminadas
 const { resMsg, port } = require('./config/config');
 //importar el app pre-configurado
@@ -10,28 +10,26 @@ const dbUser = require('./model/user');
 
 const { green, yellow, cyan } = require('chalk');
 
-io.on('connection', (socket) => {
-  socket.on('message', (data) => {
+io.on('connection', socket => {
+  socket.on('message', data => {
     io.emit('message', { message: 'backend' });
   });
 
-  socket.on('imageChange', (data) => {
-    io.emit('message', (data));
+  socket.on('imageChange', data => {
+    io.emit('message', data);
   });
 
-  socket.on('chaton', (data) => {
+  socket.on('chaton', data => {
     dbUser.findOne({ _id: data.emitter }, (err, user) => {
       const { _id, image, nick } = user;
       data.eData = {
         id: _id,
         image: image,
-        nick: nick
-      }
+        nick: nick,
+      };
       io.emit('chaton', data);
-    })
-
-  })
-
+    });
+  });
 });
 
 // setInterval(() => {
@@ -53,8 +51,9 @@ io.on('connection', (socket) => {
 
 //abri un server
 server.listen(port, () => {
-  console.log(`${cyan(`[${require('./package.json').name}]`)} ${green(`[${resMsg.serverOn.toUpperCase(r => r)}]`)} [Port:${yellow(` ${port}`)}]`)
+  console.log(
+    `${cyan(`[${require('./package.json').name}]`)} ${green(
+      `[${resMsg.serverOn.toUpperCase(r => r)}]`,
+    )} [Port:${yellow(` ${port}`)}]`,
+  );
 });
-
-
-
