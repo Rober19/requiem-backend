@@ -27,10 +27,14 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 //rutas
-app.use('/app', followRouter);
-app.use('/app', messageRouter);
-app.use('/app', userRouter);
-app.use('/app', publicationRouter);
+// app.use('/app', followRouter);
+// app.use('/app', messageRouter);
+// app.use('/app', userRouter);
+// app.use('/app', publicationRouter);
+
+app.get('/', (req, res ) => {
+  res.send({msg: 'Ya!'})
+})
 
 app.use((err, req, res, next) => {
   res.status(500).send(`${err}`);
