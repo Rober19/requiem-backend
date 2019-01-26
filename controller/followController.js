@@ -1,17 +1,9 @@
 'use strict'
-//requerimos path para la direcciones de carpeta - creo
-const path = require('path');
-// la depn fs (fileSystem) para la gestion de archivos y carpetas
-const fs = require('fs');
+
 // config pues para las preferencias predeterminadas
-const config = require('../config/config');
-// Paginate para la paginacion de datos provenientes de la DB
-const mongoosePaginate = require('mongoose-pagination');
+const { resMsg, resJson, } = require('../config/config');
 // el modelos de follow
 const dbFollow = require('../model/follow');
-//el modelo del usuaruo
-const dbUser = require('../model/user');
-
 
 //este es el esquema que usaremos del modelo follows
 function Follow(req) {
@@ -27,23 +19,23 @@ function Follow(req) {
 function createFollow(req, res) {
 
   //esta sentencia sera para impedir que un usuario se siga a si mismo
-  if (Follow(req).user == Follow(req).followed) return res.status(500).send(config.resJson(config.resMsg.userFollowNotSelf, 500));
+  if (Follow(req).user == Follow(req).followed) return res.status(500).send(resJson(resMsg.userFollowNotSelf, 500));
 
   dbFollow.findOne({
     //usamos la estructura del OR de mongoose
     $and: [{ user: Follow(req).user }, { followed: Follow(req).followed }]
   }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.userFollowedErr, 500));
     if (data == null) {
       //se tomaran los valores del usuario y se registrara el follow en la DB
-      dbFollow.create(Follow(req), (err, data) => {
+      dbFollow.create(Follow(req), (err/*, data*/) => {
         //si ocurre algun error pues lo retornaremos
-        if (err) return res.status(400).send(config.resJson(config.resMsg.userFollowedErr, 200));
+        if (err) return res.status(400).send(resJson(resMsg.userFollowedErr, 200));
         //sino retornaremos un mensaje exitoso
-        res.status(200).send(config.resJson(config.resMsg.userFollowedOK, 200));
+        res.status(200).send(resJson(resMsg.userFollowedOK, 200));
       });
     } else {
-      res.status(200).send(config.resJson(config.resMsg.userFollowedExist, 200));
+      res.status(200).send(resJson(resMsg.userFollowedExist, 200));
     }
   });
 
@@ -57,13 +49,13 @@ function isFollow(req, res) {
     $and: [{ user: Follow(req).user }, { followed: req.params.id }]
   }, (err, data) => {
 
-    if (err) return res.status(500).send(config.resJson(config.resMsg.userUnfollowedErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.userUnfollowedErr, 500));
 
     if (data == null) {
-      if (!req.body.followed) return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
-      res.status(200).send(config.resJson(config.resMsg.userNotFollowed, 200));
+      if (!req.body.followed) return res.status(500).send(resJson(resMsg.userNotFound, 500));
+      res.status(200).send(resJson(resMsg.userNotFollowed, 200));
     } else {
-        res.status(200).send(data);
+      res.status(200).send(data);
     }
   });
 
@@ -77,18 +69,18 @@ function deleteFollow(req, res) {
     $and: [{ user: Follow(req).user }, { followed: Follow(req).followed }]
   }, (err, data) => {
 
-    if (err) return res.status(500).send(config.resJson(config.resMsg.userUnfollowedErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.userUnfollowedErr, 500));
 
     if (data == null) {
-      if (!req.body.followed) return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
-      res.status(200).send(config.resJson(config.resMsg.userNotFollowed, 200));
+      if (!req.body.followed) return res.status(500).send(resJson(resMsg.userNotFound, 500));
+      res.status(200).send(resJson(resMsg.userNotFollowed, 200));
     } else {
       //se tomaran los valores del usuario y se eliminara el follow en la DB
-      dbFollow.remove(Follow(req), (err, data) => {
+      dbFollow.remove(Follow(req), (err/*, data*/) => {
         //si ocurre algun error pues lo retornaremos
-        if (err) return res.status(400).send(config.resJson(config.resMsg.userUnfollowedErr, 400));
+        if (err) return res.status(400).send(resJson(resMsg.userUnfollowedErr, 400));
         //sino retornaremos un mensaje exitoso
-        res.status(200).send(config.resJson(config.resMsg.userUnfollowedOK, 200));
+        res.status(200).send(resJson(resMsg.userUnfollowedOK, 200));
       });
 
     }
@@ -109,9 +101,9 @@ function getFollowingUsers(req, res) {
   let itemsPerPage = 10;
   // buscaremos el usuario y mostraremos sus seguidores
   dbFollow.find({ user: user_id }).populate({ path: 'followed' }).paginate(Page, itemsPerPage, (err, users, total) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
-    if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
+    if (!users) return res.status(404).send(resJson(resMsg.notUsers, 404));
 
     return res.status(200).send({
       //los datos encontrados
@@ -137,9 +129,9 @@ function getFollowersUsers(req, res) {
   let itemsPerPage = 4;
 
   dbFollow.find({ followed: user_id }).populate({ path: 'user' }).paginate(Page, itemsPerPage, (err, users, total) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
-    if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
+    if (!users) return res.status(404).send(resJson(resMsg.notUsers, 404));
 
     return res.status(200).send({
       users,
@@ -149,41 +141,6 @@ function getFollowersUsers(req, res) {
   });
 
 }
-
-function uploadImage(req, res) {
-
-  const user_id = req.user.sub;
-  let image_name = req.file_name;
-
-  const img_user = image_name.split('\--');
-  const heroku_backend = 'https://backend-mean5-project.herokuapp.com/app/get-image-user/'
-
-  const path_file = './uploads/users/' + image_name;
-
-  image_name = `publication--${img_user[0]}${img_user[2]}`;
-  fs.renameSync(path_file, `./uploads/users/${image_name}`);
-
-
-  dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${heroku_backend}${image_name}` }, { new: true }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
-
-    if (data != null) {
-      //este es el id del usuario descifrado de la imagen
-      const img_id_user = jwt.decode(img_user[0], config.secret_name_image);
-
-      //para que no aparezca el hash de la contraseña
-      data.password = undefined;
-      return res.status(200).send(config.resJson(data, 200));
-
-    } else {
-      return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
-    }
-
-
-
-  });
-}
-
 
 module.exports = {
   createFollow,

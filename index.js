@@ -1,6 +1,6 @@
 'use strict'
 //importar mis configuraciones predeterminadas
-const config = require('./config/config');
+const { resMsg, port } = require('./config/config');
 //importar el app pre-configurado
 const app = require('./app');
 const server = require('http').Server(app);
@@ -51,12 +51,9 @@ io.on('connection', (socket) => {
 
 // }, 300000)
 
-const bcrypt = require('bcrypt-nodejs');
-//hash: $2a$10$v0/r9NWk9D/I0ZdVQsI91.Fi/n0d3R6CLUBjS/xRo9JKh/n9yl2KG
-
 //abri un server
-server.listen(config.port, () => {
-  console.log(`${cyan(`[${require('./package.json').name}]`)} ${green(`[${config.resMsg.serverOn.toUpperCase(r => r)}]`)} [Port:${yellow(` ${config.port}`)}]`)
+server.listen(port, () => {
+  console.log(`${cyan(`[${require('./package.json').name}]`)} ${green(`[${resMsg.serverOn.toUpperCase(r => r)}]`)} [Port:${yellow(` ${port}`)}]`)
 });
 
 

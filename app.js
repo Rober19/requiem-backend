@@ -3,12 +3,18 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const config = require('./config/config');
-const userRouter = require('./routes/user');
-const publicationRouter = require('./routes/publication');
-const followRouter = require('./routes/follow');
-const messageRouter = require('./routes/message');
 const cors = require('cors')
+const [
+  userRouter,
+  publicationRouter,
+  followRouter,
+  messageRouter
+] = [
+  require('./routes/user'),
+  require('./routes/publication'),
+  require('./routes/follow'),
+  require('./routes/message')
+]
 
 //cors
 app.use(cors())
@@ -31,8 +37,9 @@ app.use('/app', messageRouter);
 app.use('/app', userRouter);
 app.use('/app', publicationRouter);
 
-app.use(function (err, req, res, next) {  
+app.use(function (err, req, res, next) {
   res.status(500).send(`${err}`)
+  next()
 })
 
 module.exports = app;

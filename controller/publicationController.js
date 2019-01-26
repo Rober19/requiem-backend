@@ -1,11 +1,9 @@
 'use strict'
 
-const path = require('path');
-const fs = require('fs');
+
 const config = require('../config/config');
 const moment = require('moment');
-const mongoosePaginate = require('mongoose-pagination');
-const fetch = require('node-fetch');
+
 const dbPublication = require('../model/publication');
 const dbFollow = require('../model/follow');
 
@@ -121,7 +119,7 @@ function getPublication(req, res) {
 }
 
 function uploadImagePub(req, res) {
-  const user_id = req.user.sub;
+  //-const user_id = req.user.sub;
   const pub_id = req.params.id;
   let file_name = req.file_name;
   const heroku_backend = `${config.ip_fetch.temp}/app/get-file-pub/${req.user.sub}/`
@@ -154,5 +152,6 @@ module.exports = {
   getPublication,
   deletePublication,
   uploadImagePub,
-  getImagePub
+  getImagePub,
+  getPublications_followed
 }

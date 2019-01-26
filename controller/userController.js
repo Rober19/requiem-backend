@@ -1,24 +1,35 @@
 'use strict'
 
 // la configuracion previa para el desarrollo
-const config = require('../config/config');
+const { resMsg, resJson, admin_secret } = require('../config/config');
 // la depnd de paginacion
-const dbPaginate = require('mongoose-pagination');
+
 // el modelo USUARIO de mongoose
-const dbUser = require('../model/user');
-const dbFollow = require('../model/follow');
-const dbPublication = require('../model/publication');
+// const dbUser = require('../model/user');
+// const dbFollow = require('../model/follow');
+// const dbPublication = require('../model/publication');
+
+const [
+  dbUser,
+  dbFollow,
+  dbPublication
+] = [
+    require('../model/user'),
+    require('../model/follow'),
+    require('../model/publication')
+  ]
+  
 // la depnd de encriptamiento para contraseñas
 const bcrypt = require('bcrypt-nodejs');
 // la depnd de encriptamiento para datos del usuario(en tokens)
 const jwt_user = require('../services/jwt');
 // la depnd de creacion de tokens
-const jwt = require('jwt-simple');
+//-const jwt = require('jwt-simple');
 // libreria para trabajar con archivos FILE SYSTEM
-const fs = require('fs');
+//-const fs = require('fs');
 // trabajar con rutas del sistema de ficheros
-const path = require('path');
-const fetch = require('node-fetch');
+//-const path = require('path');
+//-const fetch = require('node-fetch');
 
 
 
@@ -73,21 +84,21 @@ function createUser(req, res) {
     $or: [{ email: userData.email }, { nick: userData.nick }]
   }, (err, data) => {
     //aqui retoranremos errores
-    if (err) return res.status(500).send(config.resJson(config.resMsg.RegisterErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.RegisterErr, 500));
     //en caso de encontrar alguno de los 2 datos pues retornara un mensaje de existencia comprobada
 
     if (data != null) {
-      return res.status(400).send(config.resJson(config.resMsg.userExist, 400));
+      return res.status(400).send(resJson(resMsg.userExist, 400));
     } else {
       //de lo contrario, se tomaran los valores del usuario y se registraran en la DB
       dbUser.create(userData, (err, data) => {
         //si ocurre algun error pues lo retornaremos
-        if (err) return res.status(400).send(config.resJson(config.resMsg.RegisterErr, 400));
+        if (err) return res.status(400).send(resJson(resMsg.RegisterErr, 400));
         //sino retornaremos un mensaje exitoso
         req.headers.user = data.id;
-        //fetch(`${config.ip_fetch.temp}/app/create-dir`, { method: 'POST', headers: req.headers });
-        config.logger('', req.body, config.resJson(config.resMsg.userCreateOK, 200), null, null)
-        res.status(200).send(config.resJson(config.resMsg.userCreateOK, 200));
+        //fetch(`${ip_fetch.temp}/app/create-dir`, { method: 'POST', headers: req.headers });
+        logger('', req.body, resJson(resMsg.userCreateOK, 200), null, null)
+        res.status(200).send(resJson(resMsg.userCreateOK, 200));
       });
     }
   });
@@ -99,7 +110,7 @@ function loginUser(req, res) {
   // antes de hacer el login buscaremos si el email registrado existe
   let userData = User(req);
   dbUser.findOne({ email: userData.email }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
     if (data != null) {
       // si existe pues procederemos a comprobar la contraseña registrada
 
@@ -112,11 +123,11 @@ function loginUser(req, res) {
         if (req.body.tokenget) {
           const toker_reds = jwt_user.createToken(data);
           //client.set(data.nick, toker_reds)
-          return res.status(200).send(config.resJson(toker_reds, 200));
+          return res.status(200).send(resJson(toker_reds, 200));
         } else {
           dbUser.findByIdAndUpdate({ _id: data._id }, { times_logged: (data.times_logged + 1) }, { new: true }, (err, data) => { });
           data.password = undefined;
-          return res.status(200).send(config.resJson(data, 200));
+          return res.status(200).send(resJson(data, 200));
         }
 
 
@@ -124,11 +135,11 @@ function loginUser(req, res) {
 
       } else {
         //pero en caso de que no simplemente retornaremos que la contraseña es incorrecta
-        return res.status(404).send(config.resJson(config.resMsg.PasswordErr, 404));
+        return res.status(404).send(resJson(resMsg.PasswordErr, 404));
       }
     } else {
       // sino pues evitaremos la comprobacion del resto de datos
-      return res.status(404).send(config.resJson(config.resMsg.userNotFound, 404));
+      return res.status(404).send(resJson(resMsg.userNotFound, 404));
     }
   });
 }
@@ -137,26 +148,26 @@ function getUser(req, res) {
   const id_user = req.params.id;
 
   dbUser.findOne({ _id: id_user }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
     if (data != null) {
-      if (req.headers.admin_secret == config.admin_secret) {
-        return res.status(200).send(config.resJson(jwt_user.createToken(data), 200));
+      if (req.headers.admin_secret == admin_secret) {
+        return res.status(200).send(resJson(jwt_user.createToken(data), 200));
       } else {
         data.password = undefined;
 
         follow_data(req.user.sub, id_user).then(follow_data => {
 
-          return res.status(200).send(config.resJson({ data, follow_data }, 200));
+          return res.status(200).send(resJson({ data, follow_data }, 200));
 
         },
           err => {
-            return res.status(400).send(config.resJson(err, 400));
+            return res.status(400).send(resJson(err, 400));
           })
 
       }
     } else {
-      return res.status(200).send(config.resJson(config.resMsg.userNotFound, 200));
+      return res.status(200).send(resJson(resMsg.userNotFound, 200));
     }
 
   });
@@ -167,19 +178,19 @@ async function getUser_Counters(req, res) {
   let following = await dbFollow.count({
     user: req.params.id
   }, (err, follow) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
     return follow;
   });
 
   let followBack = await dbFollow.count({
     followed: req.params.id
   }, (err, follow) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
     return follow;
   });
 
   let publications = await dbPublication.count({ user: req.params.id }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
     return data;
   });
 
@@ -197,7 +208,7 @@ async function follow_data(user, followed) {
     user: user,
     followed: followed
   }, (err, follow) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.userFollowedErr, 500));
     return follow;
   }).select({ '_id': 0, '__v': 0, 'user': 0 });;
 
@@ -205,7 +216,7 @@ async function follow_data(user, followed) {
     user: followed,
     followed: user
   }, (err, follow) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.userFollowedErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.userFollowedErr, 500));
     return follow;
   }).select({ '_id': 0, '__v': 0, 'user': 0 });;
 
@@ -220,12 +231,12 @@ async function follow_data(user, followed) {
 async function user_follows(user_id) {
 
   let following = await dbFollow.find({ user: user_id }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
     return data;
   }).select({ '_id': 0, '__v': 0, 'user': 0 });
 
   let followers = await dbFollow.find({ followed: user_id }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
     return data;
   }).select({ '_id': 0, '__v': 0, 'followed': 0 });
 
@@ -252,15 +263,15 @@ function getUsers(req, res) {
   if (req.query.page) {
     Page = req.query.page;
   } else {
-    return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+    return res.status(500).send(resJson(resMsg.requestErr, 500));
   }
 
   let itemsPerPage = 6;
 
   dbUser.find({}).select(['-password']).sort('_id').paginate(Page, itemsPerPage, (err, users, total) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
-    if (!users) return res.status(404).send(config.resJson(config.resMsg.notUsers, 404));
+    if (!users) return res.status(404).send(resJson(resMsg.notUsers, 404));
 
     user_follows(req.user.sub).then((value) => {
       return res.status(200).send({
@@ -285,22 +296,22 @@ function updateUser(req, res) {
   delete data_upt.image;
 
   if (user_id != req.user.sub) {
-    return res.status(500).send(config.resJson(config.resMsg.nonAuth, 500));
+    return res.status(500).send(resJson(resMsg.nonAuth, 500));
   }
 
   dbUser.findOne({ _id: user_id }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
 
     if (data != null) {
       dbUser.findByIdAndUpdate({ _id: user_id }, data_upt, { new: true }, (err, data) => {
-        if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+        if (err) return res.status(500).send(resJson(resMsg.error, 500));
         data.image = undefined;
-        return res.status(200).send(config.resJson(data, 200));
+        return res.status(200).send(resJson(data, 200));
 
       });
 
     } else {
-      res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
+      res.status(500).send(resJson(resMsg.userNotFound, 500));
     }
 
   });
@@ -313,25 +324,25 @@ function uploadImage(req, res) {
   const user_id = req.user.sub;
   let image_name = req.file_name;
 
-  //const backend = `${config.ip_fetch.temp}/app/get-image-user/${req.user.sub}/`;
+  //const backend = `${ip_fetch.temp}/app/get-image-user/${req.user.sub}/`;
 
   dbUser.findByIdAndUpdate({ _id: user_id }, { image: `${image_name}` }, { new: true }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.error, 500));
+    if (err) return res.status(500).send(resJson(resMsg.error, 500));
 
     if (data != null) {
       //para que no aparezca el hash de la contraseña
       data.password = undefined;
-      return res.status(200).send(config.resJson(data, 200));
+      return res.status(200).send(resJson(data, 200));
     } else {
-      return res.status(500).send(config.resJson(config.resMsg.userNotFound, 500));
+      return res.status(500).send(resJson(resMsg.userNotFound, 500));
     }
   });
 }
 
 //#region getImageUser
-async function getImageUser(req, res) {
-  res.redirect(`${config.ip_fetch.temp}/app/get-image-user/${req.params.id}/${req.params.imageFile}`);
-}
+// async function getImageUser(req, res) {
+//   res.redirect(`${ip_fetch.temp}/app/get-image-user/${req.params.id}/${req.params.imageFile}`);
+// }
 //#endregion 
 
 module.exports = {
@@ -341,6 +352,5 @@ module.exports = {
   getUsers,
   updateUser,
   uploadImage,
-  getImageUser,
   getUser_Counters
 }

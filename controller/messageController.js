@@ -5,8 +5,8 @@ const dbMessage = require('../model/message');
 const dbUser = require('../model/user');
 
 // config pues para las preferencias predeterminadas
-const config = require('../config/config');
-const mongoosePaginate = require('mongoose-pagination');
+const { resJson, resMsg } = require('../config/config');
+//-const mongoosePaginate = require('mongoose-pagination');
 
 function message(req) {
   const message = {
@@ -22,17 +22,17 @@ function message(req) {
 function createMessage(req, res) {
 
   dbUser.findOne({ _id: message(req).receiver }, (err, user) => {
-    if (err) return res.status(400).send(config.resJson(config.resMsg.error, 400));
+    if (err) return res.status(400).send(resJson(resMsg.error, 400));
 
     if (user != null && user != undefined) {
       dbMessage.create(message(req), (err, data) => {
         //si ocurre algun error pues lo retornaremos
-        if (err) return res.status(400).send(config.resJson(config.resMsg.error, 400));
+        if (err) return res.status(400).send(resJson(resMsg.error, 400));
         //sino retornaremos un mensaje exitoso
-        res.status(200).send(config.resJson(config.resMsg.confirm, 200));
+        res.status(200).send(resJson(resMsg.confirm, 200));
       });
     } else {
-      return res.status(200).send(config.resJson(config.resMsg.userNotFound, 200));
+      return res.status(200).send(resJson(resMsg.userNotFound, 200));
     }
 
   })
@@ -43,7 +43,7 @@ function createMessage(req, res) {
 function getMessages(req, res) {
 
   // aqui estara el params.id 
-  const user_id = req.user.sub;
+  //-const user_id = req.user.sub;
   // la pagina inicial y por defecto será la 1
   let Page = 1;
   // si existe una pagina enviada por query pues se cambiará el valor de Page
@@ -65,9 +65,9 @@ function getMessages(req, res) {
     .sort('created_at')
     .populate('receiver emitter', '-password -__v -name -surname -email')
     .paginate(Page, itemsPerPage, (err, message, total) => {
-      if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+      if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
-      if (!message) return res.status(404).send(config.resJson(config.resMsg.notMessage, 404));
+      if (!message) return res.status(404).send(resJson(resMsg.notMessage, 404));
 
       return res.status(200).send({
         //los datos encontrados
@@ -97,9 +97,9 @@ function getReceivedMessage(req, res) {
   dbMessage.find({ receiver: user_id })
     .populate('receiver emitter', '-password -__v -name -surname -_id -email')
     .paginate(Page, itemsPerPage, (err, message, total) => {
-      if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+      if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
-      if (!message) return res.status(404).send(config.resJson(config.resMsg.notMessage, 404));
+      if (!message) return res.status(404).send(resJson(resMsg.notMessage, 404));
 
       return res.status(200).send({
         //los datos encontrados
@@ -129,9 +129,9 @@ function getEmittMessage(req, res) {
   dbMessage.find({ emitter: user_id })
     .populate('receiver emitter', '-password -__v -name -surname -_id -email')
     .paginate(Page, itemsPerPage, (err, message, total) => {
-      if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+      if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
-      if (!message) return res.status(404).send(config.resJson(config.resMsg.notMessage, 404));
+      if (!message) return res.status(404).send(resJson(resMsg.notMessage, 404));
 
       return res.status(200).send({
         //los datos encontrados
@@ -152,7 +152,7 @@ function getUnviewedMessage(req, res) {
 
   // buscaremos el usuario y mostraremos sus seguidores
   dbMessage.count({ receiver: user_id, seen: 'false' }).exec((err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
     return res.status(200).send({ unviewed: data });
   });
@@ -162,7 +162,7 @@ function setViewedMessages(req, res) {
   const user_id = req.user.sub;
 
   dbMessage.update({ receiver: user_id, seen: 'false' }, { seen: 'true' }, { "multi": true }, (err, data) => {
-    if (err) return res.status(500).send(config.resJson(config.resMsg.requestErr, 500));
+    if (err) return res.status(500).send(resJson(resMsg.requestErr, 500));
 
     return res.status(200).send({ Messages: data.nModified });
   })

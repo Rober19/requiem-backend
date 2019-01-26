@@ -1,11 +1,14 @@
 'use strict'
 //puerto predeterminado
 const myConfig = require('rober19-config')
+const dotenv = require('dotenv');
+dotenv.config();
 
-const dev_crendentials = require('../credentials-rober19/credentials_rober19')
+const dev_crendentials = JSON.parse(process.env.API_KEYS);
+
 
 const logger = require('@jmbl1685/logger')({
-  host: `mongodb://root:12345@ds046367.mlab.com:46367/db-social-mean5`
+  host: `mongodb://${dev_crendentials.creds.mlab_db}/db-social-mean5`
 });
 
 const google_cloud_credentials = dev_crendentials.rober19_firebase;
