@@ -1,11 +1,14 @@
 {
   "name": "backend-api",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "Backend para la red-social",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
+  },
+  "engines": {
+    "node": "^10"
   },
   "keywords": [],
   "author": "Rober19",
