@@ -6,3 +6,4 @@ package-lock.json
 /functions/node_modules
 .vscode
 .env
+/.idea

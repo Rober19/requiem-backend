@@ -16,7 +16,7 @@ app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+//morgan
 app.use(morgan('dev'));
 
 //rutas

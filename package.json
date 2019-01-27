@@ -1,6 +1,6 @@
 {
   "name": "backend-api",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "description": "Backend para la red-social",
   "main": "index.js",
   "scripts": {
@@ -37,5 +37,11 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.8"
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "all"
   }
 }
