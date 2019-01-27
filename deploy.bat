@@ -11,7 +11,8 @@ cd..
 RD /s /q tempF1
 git add -A
 REM tambien en la fecha se puede usar el %date%
-REM git commit -m "[%gituser%] [%datestr%] %commit% "
+REM git commit -m "[%gituser%] [%date
+str%] %commit% "
 call npm version patch -f
 git push origin master
 pause
