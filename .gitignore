@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+<<<<<<< HEAD
 package-lock.json
 /credentials
 /functions/data
@@ -7,3 +8,5 @@ package-lock.json
 .vscode
 .env
 /.idea
+=======
+>>>>>>> parent of 2851432... fix
