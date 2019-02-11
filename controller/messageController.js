@@ -25,7 +25,7 @@ function createMessage(req, res) {
     if (err) return res.status(400).send(resJson(resMsg.error, 400));
 
     if (user != null && user != undefined) {
-      dbMessage.create(message(req), (err, data) => {
+      dbMessage.create(message(req), (err) => {
         //si ocurre algun error pues lo retornaremos
         if (err) return res.status(400).send(resJson(resMsg.error, 400));
         //sino retornaremos un mensaje exitoso
