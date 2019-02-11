@@ -1,7 +1,7 @@
 # dependencies
 /node_modules
 package-lock.json
-
+/credentials
 /functions/data
 /functions/node_modules
 .vscode
