@@ -61,6 +61,25 @@ function User(req) {
     password
   } = req.body
 
+/*
+
+function createMenu(config) {
+  config = Object.assign(
+    {
+      title: "Foo",
+      body: "Bar",
+      buttonText: "Baz",
+      cancellable: true
+    },
+    config
+  );
+
+  // config now equals: {title: "Order", body: "Bar", buttonText: "Send", cancellable: true}
+  // ...
+}
+
+createMenu(menuConfig);
+*/
 
   return {
     name,
