@@ -116,7 +116,7 @@ function createUser(req, res) {
         //sino retornaremos un mensaje exitoso
         req.headers.user = data.id;
         //fetch(`${ip_fetch.temp}/app/create-dir`, { method: 'POST', headers: req.headers });
-        logger('', req.body, resJson(resMsg.userCreateOK, 200), null, null)
+        //logger('', req.body, resJson(resMsg.userCreateOK, 200), null, null)
         res.status(200).send(resJson(resMsg.userCreateOK, 200));
       });
     }
