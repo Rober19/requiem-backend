@@ -2,12 +2,6 @@
 
 // la configuracion previa para el desarrollo
 const { resMsg, resJson, admin_secret } = require('../config/config');
-// la depnd de paginacion
-
-// el modelo USUARIO de mongoose
-// const dbUser = require('../model/user');
-// const dbFollow = require('../model/follow');
-// const dbPublication = require('../model/publication');
 
 const [
   dbUser,
@@ -23,23 +17,7 @@ const [
 const bcrypt = require('bcrypt-nodejs');
 // la depnd de encriptamiento para datos del usuario(en tokens)
 const jwt_user = require('../services/jwt');
-// la depnd de creacion de tokens
-//-const jwt = require('jwt-simple');
-// libreria para trabajar con archivos FILE SYSTEM
-//-const fs = require('fs');
-// trabajar con rutas del sistema de ficheros
-//-const path = require('path');
-//-const fetch = require('node-fetch');
 
-
-
-// const redis = require("redis")
-
-// const client = redis.createClient({
-//   port:12864,
-//   auth_pass: 't0AhWeg0H3p2TacMjTmiBT8lII3zvMAb',
-//   host:'redis-12864.c9.us-east-1-4.ec2.cloud.redislabs.com'
-// });
 
 // validador de la contraseña traida por el req.body
 function Passcrypt(password) {
@@ -61,25 +39,6 @@ function User(req) {
     password
   } = req.body
 
-/*
-
-function createMenu(config) {
-  config = Object.assign(
-    {
-      title: "Foo",
-      body: "Bar",
-      buttonText: "Baz",
-      cancellable: true
-    },
-    config
-  );
-
-  // config now equals: {title: "Order", body: "Bar", buttonText: "Send", cancellable: true}
-  // ...
-}
-
-createMenu(menuConfig);
-*/
 
   return {
     name,

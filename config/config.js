@@ -1,6 +1,7 @@
 'use strict';
 //puerto predeterminado
-const myConfig = require('rober19-config');
+const { port, resJson, resMsg } = require('rober19-config');
+
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -12,9 +13,7 @@ const dev_crendentials = JSON.parse(process.env.API_KEYS);
 
 const google_cloud_credentials = dev_crendentials.rober19_firebase;
 
-const port = process.env.PORT || 3000;
-
-const resMsg = myConfig.resMsg;
+const app_port = port[0] || process.env.PORT;
 
 //contraseñas para los tokens
 const admin_secret = 'givemethetoken';
@@ -26,18 +25,13 @@ const ip_fetch = {
     'https://firebasestorage.googleapis.com/v0/b/rober-firebase.appspot.com/o/Requiem-project%2FProfile-image%2Fdefault-user.png?alt=media&token=ba901b72-bbc0-44de-a897-cda79e6552a5',
 };
 
-//funcion que responde los parametros
-function resJson(msg, status) {
-  const answer = { data: msg, status: status };
-  return answer;
-}
 //funcion de prueba
 function resTest(res) {
   res.status(200).send(resJson(resMsg.confirm, 200));
 }
 
 module.exports = {
-  port,
+  app_port,
   resMsg,
   resJson,
   resTest,
@@ -46,6 +40,6 @@ module.exports = {
   admin_secret,
   ip_fetch,
   dev_crendentials,
-  google_cloud_credentials
+  google_cloud_credentials,
   //logger,
 };

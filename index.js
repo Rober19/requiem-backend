@@ -1,6 +1,6 @@
 'use strict';
 //importar mis configuraciones predeterminadas
-const { resMsg, port } = require('./config/config');
+const { resMsg, app_port } = require('./config/config');
 //importar el app pre-configurado
 const app = require('./app');
 const server = require('http').Server(app);
@@ -34,10 +34,10 @@ io.on('connection', socket => {
 
 
 //abri un server
-server.listen(port, () => {
+server.listen(app_port, () => {
   console.log(
     `${cyan(`[${require('./package.json').name}]`)} ${green(
       `[${resMsg.serverOn.toUpperCase(r => r)}]`,
-    )} [Port:${yellow(` ${port}`)}]`,
+    )} [Port:${yellow(` ${app_port}`)}]`,
   );
 });
