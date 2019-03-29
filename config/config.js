@@ -13,7 +13,7 @@ const dev_crendentials = JSON.parse(process.env.API_KEYS);
 
 const google_cloud_credentials = dev_crendentials.rober19_firebase;
 
-const app_port = port[0] || process.env.PORT;
+const app_port = process.env.PORT || port[0]; 
 
 //contraseñas para los tokens
 const admin_secret = 'givemethetoken';
